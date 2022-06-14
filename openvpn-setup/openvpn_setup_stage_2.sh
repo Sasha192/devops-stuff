@@ -3,7 +3,8 @@
 EASY_RSA_DIR="/home/${USER}/easy-rsa"
 
 
-cd ${EASY_RSA_DIR}
+cd ${EASY_RSA_DIR} || (echo "Could not pass into ${EASY_RSA_DIR}" && exit 1)
+
 
 # first import the certification request
 ./easyrsa import-req /tmp/server.req server
@@ -19,4 +20,4 @@ scp pki/ca.crt sammy@your_vpn_server_ip:/tmp
 
 # login at the OpenVPN server
 # move the 'server.crt' and 'ca.crt' files to /etc/openvpn/server
-# 
+#

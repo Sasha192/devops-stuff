@@ -5,6 +5,8 @@ USER=$(whoami)
 EASY_RSA_DIR="/home/${USER}/easy-rsa"
 PREV_DIR=$(pwd)
 
+
+
 RED='\033[0;31m'
 NC='\033[0m'
 
@@ -26,7 +28,7 @@ function check_last_else () {
 		echo_red "... The last command was not successful ..."
 		echo_red "... Please, check logs ..."
 		echo_red "... Executing the last ELSE_CMD ..."
-		$(ELSE_CMD)
+		bash -c "${ELSE_CMD}"
 		echo "... Exit ..."
 		exit 1
 	fi
@@ -50,8 +52,8 @@ function install_prerequisites () {
 	sudo apt install easy-rsa
 	if [ ! -d "${EASY_RSA_DIR}" ]
 	then 
-		mkdir ${EASY_RSA_DIR}
-		ln -s /usr/share/easy-rsa/* ${EASY_RSA_DIR}
+		mkdir ${EASY_RSA_DIR} && \
+		ln -s /usr/share/easy-rsa/* ${EASY_RSA_DIR} && \
 		chmod -R 700 ${EASY_RSA_DIR}
 	fi
 }
@@ -59,17 +61,16 @@ function install_prerequisites () {
 # stage 2
 function init_pki () {
 
-	check_easy_rsa_else_exit
-	cd ${EASY_RSA_DIR}
+	check_easy_rsa_else_exit && \
+	cd ${EASY_RSA_DIR} && \
 	./easyrsa init-pki
 
 }
 
 # stage 3
-function certification_authority () {
+function create_certification_authority () {
 
-	check_easy_rsa_else_exit
-	cd ${EASY_RSA_DIR}
+	check_easy_rsa_else_exit && cd ${EASY_RSA_DIR}
 
 	read -e -p "What's your country ?:" -i "Ukraine" EASYRSA_REQ_COUNTRY
 	read -e -p "What's your province ?:" -i "Chernihiv" EASYRSA_REQ_PROVINCE
@@ -99,6 +100,65 @@ function certification_authority () {
 
 	echo -n "What's your organisational unit ?: "
 	read -r EASYRSA_REQ_OU
+
+	EASYRSA_ALGO="ec"
+	EASYRSA_DIGEST="sha512"
+
+cat <<EOF >> greetings.txt
+set_var EASYRSA_REQ_COUNTRY    "${EASYRSA_REQ_COUNTRY}"
+set_var EASYRSA_REQ_PROVINCE   "${EASYRSA_REQ_PROVINCE}"
+set_var EASYRSA_REQ_CITY       "${EASYRSA_REQ_CITY}"
+set_var EASYRSA_REQ_ORG        "${EASYRSA_REQ_ORG}"
+set_var EASYRSA_REQ_EMAIL      "${EASYRSA_REQ_EMAIL}"
+set_var EASYRSA_REQ_OU         "${EASYRSA_REQ_OU}"
+set_var EASYRSA_ALGO           "${EASYRSA_ALGO}"
+set_var EASYRSA_DIGEST         "${EASYRSA_DIGEST}"
+EOF
+
+  ./easyrsa build-ca nopass
+
+}
+
+
+#stage 4
+function distribute_ca () {
+
+
+  # send the ca.crt to the /tmp directory
+  CA_FILE="${EASY_RSA_DIR}/pki/ca.crt"
+  cd "${EASY_RSA_DIR}" || (echo "Could not pass into ${EASY_RSA_DIR}" && exit 1)
+  if [[ ! -f "${CA_FILE}" ]]; then
+    echo_red "Certificate ${CA_FILE} does not exist. Please, check previous stages" && \
+    exit 1
+  fi
+
+  cp "${CA_FILE}" /tmp/ca.crt && \
+  check_last_else "echo \"Could not save ca.crt\""
+
+  CA_UPDATED=0
+  # Ubuntu, Debian
+  if command -v update-ca-certificates &> /dev/null
+  then
+      echo_red "... 'update-ca-certificates' tool found ..." && \
+      sudo cp /tmp/ca.crt /usr/local/share/ca-certificates/ && \
+      sudo update-ca-certificates && \
+      CA_UPDATED=1
+  fi
+
+  # CentOS, Fedora, RedHat
+  if [ ${CA_UPDATED} == 0 ]
+  then
+    if command -v update-ca-trust &> /dev/null
+    then
+        echo_red "... 'update-ca-certificates' tool found ..." && \
+        sudo cp /tmp/ca.crt /etc/pki/ca-trust/source/anchors/ && \
+        sudo update-ca-trust
+    fi
+  fi
+
+
+
+
 
 }
 

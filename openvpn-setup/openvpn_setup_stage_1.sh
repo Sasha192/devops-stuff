@@ -37,50 +37,33 @@ function echo_red () {
    echo -e "\n"
 }
 
-function check_last_else () {
-
-  ELSE_CMD="echo"
-  if [ -z "$1" ]
-  then
-      ELSE_CMD="$1"
-  fi
-
-  if [ ! $? -eq 0 ]; 
-  then
+function print_exit () {
     echo_red "... The last command was not successful ..."
     echo_red "... Please, check logs ..."
-    echo_red "... Executing the last ELSE_CMD ..."
-    $(ELSE_CMD)
     echo "... Exit ..."
     exit 1
-  fi
-
 }
 
 echo_red "... #1 OpenVPN installation ..."
-. ./openvpn_stages.sh install
-check_last_else
+(. ./openvpn_stages.sh install) || print_exit
 echo_red "... #1 Done ..."
 
 echo_red "... #2 Exporting vars ..."
-. ./openvpn_stages.sh create_vars
-check_last_else
+(. ./openvpn_stages.sh create_vars) || print_exit
 echo_red "... #2 Done ..."
 
 echo_red "... #3 PKI creation ..."
-. ./openvpn_stages.sh init_pki
-check_last_else
+(. ./openvpn_stages.sh init_pki) || print_exit
 echo_red "... #3 Done ..."
 
 echo_red "... #4 Create certification request and private key ..."
-. ./openvpn_stages.sh certification_request_and_private_key
-check_last_else
+(. ./openvpn_stages.sh certification_request_and_private_key) || print_exit
 echo_red "... #4 Done ..."
 
 echo_red "... #5 Sending certification request..."
-. ./openvpn_stages.sh send_certification_request
-check_last_else
+(. ./openvpn_stages.sh send_certification_request) || print_exit
 echo_red "... #5 Done ..."
 
 
+# clean history
 history -c

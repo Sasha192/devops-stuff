@@ -32,7 +32,7 @@ function check_last_else () {
 		echo_red "... The last command was not successful ..."
 		echo_red "... Please, check logs ..."
 		echo_red "... Executing the last ELSE_CMD ..."
-		$(ELSE_CMD)
+    bash -c "${ELSE_CMD}"
 		echo "... Exit ..."
 		exit 1
 	fi
@@ -58,10 +58,10 @@ function install () {
 function create_vars () {
 
 
-	cd $EASY_RSA_DIR && \
+	cd "$EASY_RSA_DIR" && \
 	touch vars && \
 	echo "set_var EASYRSA_ALGO \"ec\"" | tee vars && \
-	echo "set_var EASYRSA_DIGEST \"sha512\"" | tee -a vars && \
+	echo "set_var EASYRSA_DIGEST \"sha512\"" | tee -a vars
 
 }
 
@@ -79,11 +79,9 @@ function certification_request_and_private_key () {
 	# https://www.digitalocean.com/community/tutorials/how-to-set-up-and-configure-an-openvpn-server-on-ubuntu-20-04-ru#3-openvpn
 
 	export EASYRSA_BATCH=1 && \
-	cd $EASY_RSA_DIR && \
-	./easyrsa gen-req ${UNIQUE_HOST_SHORT_NAME} nopass && \
-	sudo cp "${EASY_RSA_DIR}/pki/private/${UNIQUE_HOST_SHORT_NAME}.key /etc/openvpn/server/" && \
-
-
+	cd "${EASY_RSA_DIR}" && \
+	./easyrsa gen-req "${UNIQUE_HOST_SHORT_NAME}" nopass && \
+	sudo cp "${EASY_RSA_DIR}/pki/private/${UNIQUE_HOST_SHORT_NAME}.key /etc/openvpn/server/"
 
 }
 
@@ -107,18 +105,17 @@ function send_certification_request_from_arg () {
 # stage 6: pre-shared-keys
 function pre_shared_keys_configuration () {
 
-
 	cd ${EASY_RSA_DIR} && \
 	openvpn --genkey --secret ta.key && \
-	sudo cp ${EASY_RSA_DIR}/ta.key /etc/openvpn/server
+	sudo cp "${EASY_RSA_DIR}/ta.key" /etc/openvpn/server
 
 }
 
 
 
-$1 "${@:2}"
-check_last_else "cd ${PREV_DIR}"
-cd ${PREV_DIR}
+$1 "${@:2}" && \
+check_last_else "cd ${PREV_DIR}" && \
+cd "${PREV_DIR}" || (echo "Could not pass into ${PREV_DIR}" && exit 1)
 
 
 
