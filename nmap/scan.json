@@ -1,0 +1,242 @@
+{
+    "nmaprun": {
+        "@scanner": "nmap",
+        "@args": "nmap -sn -oX scan.xml 192.168.31.0/24",
+        "@start": "1654860941",
+        "@startstr": "Fri Jun 10 14:35:41 2022",
+        "@version": "7.80",
+        "@xmloutputversion": "1.04",
+        "verbose": {
+            "@level": "0"
+        },
+        "debugging": {
+            "@level": "0"
+        },
+        "host": [
+            {
+                "status": {
+                    "@state": "up",
+                    "@reason": "syn-ack",
+                    "@reason_ttl": "0"
+                },
+                "address": {
+                    "@addr": "192.168.31.1",
+                    "@addrtype": "ipv4"
+                },
+                "hostnames": {
+                    "hostname": {
+                        "@name": "XiaoQiang",
+                        "@type": "PTR"
+                    }
+                },
+                "times": {
+                    "@srtt": "9612",
+                    "@rttvar": "9612",
+                    "@to": "100000"
+                }
+            },
+            {
+                "status": {
+                    "@state": "up",
+                    "@reason": "conn-refused",
+                    "@reason_ttl": "0"
+                },
+                "address": {
+                    "@addr": "192.168.31.51",
+                    "@addrtype": "ipv4"
+                },
+                "hostnames": {
+                    "hostname": {
+                        "@name": "bunin",
+                        "@type": "PTR"
+                    }
+                },
+                "times": {
+                    "@srtt": "88587",
+                    "@rttvar": "88587",
+                    "@to": "442935"
+                }
+            },
+            {
+                "status": {
+                    "@state": "up",
+                    "@reason": "conn-refused",
+                    "@reason_ttl": "0"
+                },
+                "address": {
+                    "@addr": "192.168.31.99",
+                    "@addrtype": "ipv4"
+                },
+                "hostnames": {
+                    "hostname": {
+                        "@name": "ubuntu4",
+                        "@type": "PTR"
+                    }
+                },
+                "times": {
+                    "@srtt": "43966",
+                    "@rttvar": "43966",
+                    "@to": "219830"
+                }
+            },
+            {
+                "status": {
+                    "@state": "up",
+                    "@reason": "conn-refused",
+                    "@reason_ttl": "0"
+                },
+                "address": {
+                    "@addr": "192.168.31.134",
+                    "@addrtype": "ipv4"
+                },
+                "hostnames": {
+                    "hostname": {
+                        "@name": "kolmogorov-Aspire-A715-71G",
+                        "@type": "PTR"
+                    }
+                },
+                "times": {
+                    "@srtt": "74015",
+                    "@rttvar": "74015",
+                    "@to": "370075"
+                }
+            },
+            {
+                "status": {
+                    "@state": "up",
+                    "@reason": "conn-refused",
+                    "@reason_ttl": "0"
+                },
+                "address": {
+                    "@addr": "192.168.31.152",
+                    "@addrtype": "ipv4"
+                },
+                "hostnames": {
+                    "hostname": {
+                        "@name": "ubuntu1",
+                        "@type": "PTR"
+                    }
+                },
+                "times": {
+                    "@srtt": "31221",
+                    "@rttvar": "31221",
+                    "@to": "156105"
+                }
+            },
+            {
+                "status": {
+                    "@state": "up",
+                    "@reason": "conn-refused",
+                    "@reason_ttl": "0"
+                },
+                "address": {
+                    "@addr": "192.168.31.203",
+                    "@addrtype": "ipv4"
+                },
+                "hostnames": {
+                    "hostname": {
+                        "@name": "Galaxy-A32",
+                        "@type": "PTR"
+                    }
+                },
+                "times": {
+                    "@srtt": "37108",
+                    "@rttvar": "37108",
+                    "@to": "185540"
+                }
+            },
+            {
+                "status": {
+                    "@state": "up",
+                    "@reason": "conn-refused",
+                    "@reason_ttl": "0"
+                },
+                "address": {
+                    "@addr": "192.168.31.215",
+                    "@addrtype": "ipv4"
+                },
+                "hostnames": null,
+                "times": {
+                    "@srtt": "71866",
+                    "@rttvar": "71866",
+                    "@to": "359330"
+                }
+            },
+            {
+                "status": {
+                    "@state": "up",
+                    "@reason": "conn-refused",
+                    "@reason_ttl": "0"
+                },
+                "address": {
+                    "@addr": "192.168.31.229",
+                    "@addrtype": "ipv4"
+                },
+                "hostnames": null,
+                "times": {
+                    "@srtt": "73913",
+                    "@rttvar": "73913",
+                    "@to": "369565"
+                }
+            },
+            {
+                "status": {
+                    "@state": "up",
+                    "@reason": "conn-refused",
+                    "@reason_ttl": "0"
+                },
+                "address": {
+                    "@addr": "192.168.31.243",
+                    "@addrtype": "ipv4"
+                },
+                "hostnames": {
+                    "hostname": {
+                        "@name": "kolmogorov-ThinkPad-L14-Gen-1",
+                        "@type": "PTR"
+                    }
+                },
+                "times": {
+                    "@srtt": "581",
+                    "@rttvar": "5000",
+                    "@to": "100000"
+                }
+            },
+            {
+                "status": {
+                    "@state": "up",
+                    "@reason": "conn-refused",
+                    "@reason_ttl": "0"
+                },
+                "address": {
+                    "@addr": "192.168.31.246",
+                    "@addrtype": "ipv4"
+                },
+                "hostnames": {
+                    "hostname": {
+                        "@name": "ubuntu2",
+                        "@type": "PTR"
+                    }
+                },
+                "times": {
+                    "@srtt": "8893",
+                    "@rttvar": "8893",
+                    "@to": "100000"
+                }
+            }
+        ],
+        "runstats": {
+            "finished": {
+                "@time": "1654860945",
+                "@timestr": "Fri Jun 10 14:35:45 2022",
+                "@elapsed": "3.30",
+                "@summary": "Nmap done at Fri Jun 10 14:35:45 2022; 256 IP addresses (10 hosts up) scanned in 3.30 seconds",
+                "@exit": "success"
+            },
+            "hosts": {
+                "@up": "10",
+                "@down": "246",
+                "@total": "256"
+            }
+        }
+    }
+}

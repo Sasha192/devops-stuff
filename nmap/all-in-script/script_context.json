@@ -1,0 +1,30 @@
+{
+    "context": "/home/kolmogorov/37wp/devops/nmap",
+    "instructions": [
+        {
+            "context": ".",
+            "bash_commands": [
+                "nmap -sn 192.168.31.0/24 -oX scan.xml"
+            ],
+            "internal_commands": [
+                {
+                    "context": ".",
+                    "name": "ConvertXmlToJson",
+                    "parameters": {
+                        "target": "scan.xml",
+                        "output": "scan.json"
+                    }
+                },
+                {
+                    "context": ".",
+                    "name": "HostIpExtractor",
+                    "parameters": {
+                        "target": "scan.json",
+                        "hostNamePrefix": "ubuntu",
+                        "output": "hosts_addr.json"
+                    }
+                }
+            ]
+        }
+    ]
+}
