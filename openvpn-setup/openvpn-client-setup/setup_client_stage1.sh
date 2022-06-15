@@ -11,7 +11,7 @@ CLIENT="${CLIENT_NAME}"
 RED='\033[0;31m'
 NC='\033[0m'
 
-echo_red () {
+function echo_red () {
    echo -e "${RED}$1${NC}"
    echo -e "\n"
 }

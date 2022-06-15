@@ -1,8 +1,11 @@
 #!/bin/bash
 
+(source ../standard_functions.sh && \
+echo_red "... # ../standard_functions were imported ...") \
+|| (echo "... # ../standard_functions were NOT imported ..." && exit 1)
+
 if [[ -z "${UNIQUE_HOST_SHORT_NAME}" ]]; then
   UNIQUE_HOST_SHORT_NAME="server"
-  return 1
 fi
 
 if [[ -z "${CA_USER}" ]]; then
@@ -28,21 +31,6 @@ if [[ -z "${SCP_PASSWORD}" ]]; then
   echo "... SCP_PASSWORD env variable was not specified ..."
   return 1
 fi
-
-RED='\033[0;31m'
-NC='\033[0m'
-
-function echo_red () {
-   echo -e "${RED}$1${NC}"
-   echo -e "\n"
-}
-
-function print_exit () {
-    echo_red "... The last command was not successful ..."
-    echo_red "... Please, check logs ..."
-    echo "... Exit ..."
-    exit 1
-}
 
 echo_red "... #1 OpenVPN installation ..."
 (. ./openvpn_stages.sh install) || print_exit

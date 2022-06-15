@@ -22,30 +22,13 @@
 # связывать ресурсы сервера. Она также затрудняет выявление
 # сетевого трафика OpenVPN.
 
-RED='\033[0;31m'
-NC='\033[0m'
-
-function echo_red () {
-   echo -e "${RED}$1${NC}"
-   echo -e "\n"
-}
-
-function check_last () {
-
-	if [ ! $? -eq 0 ]; 
-	then
-		echo_red "... The last command was not successful ..."
-		echo_red "... Please, check logs ..."
-		echo "... Exit ..."
-		exit 1
-	fi
-
-}
+(source ../standard_functions.sh && \
+echo_red "... # ../standard_functions were imported ...") \
+|| (echo "... # ../standard_functions were NOT imported ..." && exit 1)
 
 
 echo_red "... #1 Generation static pre-shared keys ..."
-. ./openvpn_stages.sh pre_shared_keys_configuration
-check_last
+. ./openvpn_stages.sh pre_shared_keys_configuration || print_exit
 echo_red "... #1 Done ..."
 
 

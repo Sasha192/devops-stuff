@@ -104,7 +104,7 @@ function create_certification_authority () {
 	EASYRSA_ALGO="ec"
 	EASYRSA_DIGEST="sha512"
 
-cat <<EOF >> greetings.txt
+cat <<EOF >> vars
 set_var EASYRSA_REQ_COUNTRY    "${EASYRSA_REQ_COUNTRY}"
 set_var EASYRSA_REQ_PROVINCE   "${EASYRSA_REQ_PROVINCE}"
 set_var EASYRSA_REQ_CITY       "${EASYRSA_REQ_CITY}"
@@ -155,9 +155,6 @@ function distribute_ca () {
         sudo update-ca-trust
     fi
   fi
-
-
-
 
 
 }
