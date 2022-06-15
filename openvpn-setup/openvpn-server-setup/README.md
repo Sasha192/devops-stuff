@@ -1,5 +1,10 @@
 # OpenVPN server setup
 ###Not completed
+
+actually, we can make two ways:
+1. existing one 
+2. already make changes to the base.conf and server.conf, since we need to make changes only there
+
 1. need to make it idempotent and fail resilient ? or
 2. just remove the folder and start again ? 
 
