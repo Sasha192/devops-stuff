@@ -40,7 +40,7 @@ if [[ -z "${SCP_PASSWORD}" ]]; then
 fi
 
 echo_red "... #1 OpenVPN installation ..."
-(. ./openvpn_stages.sh install) || print_exit
+(. ./openvpn_stages.sh install_prerequisites) || print_exit
 echo_red "... #1 Done ..."
 
 echo_red "... #2 Exporting vars ..."

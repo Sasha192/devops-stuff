@@ -1,39 +1,19 @@
 #!/bin/bash
 
+CURRENT_DIR="${PWD##*/}"
+
+if [[ ! "${CURRENT_DIR}" == "openvpn-ca-setup" ]]
+then
+  echo "... Please, execute the bash script from its local directory ..."
+fi
 
 USER=$(whoami)
 EASY_RSA_DIR="/home/${USER}/easy-rsa"
 PREV_DIR=$(pwd)
 
-
-
-RED='\033[0;31m'
-NC='\033[0m'
-
-function echo_red () {
-   echo -e "${RED}$1${NC}"
-   echo -e "\n"
-}
-
-function check_last_else () {
-
-	ELSE_CMD="echo"
-	if [ -z "$1" ]
-	then
-	    ELSE_CMD="$1"
-	fi
-
-	if [ ! $? -eq 0 ]; 
-	then
-		echo_red "... The last command was not successful ..."
-		echo_red "... Please, check logs ..."
-		echo_red "... Executing the last ELSE_CMD ..."
-		bash -c "${ELSE_CMD}"
-		echo "... Exit ..."
-		exit 1
-	fi
-
-}
+(source ../standard_functions.sh && \
+echo_red "... # ../standard_functions were imported ...") \
+|| (echo "... # ../standard_functions were NOT imported ..." && exit 1)
 
 function check_easy_rsa_else_exit () {
 
@@ -52,9 +32,9 @@ function install_prerequisites () {
 	sudo apt install easy-rsa
 	if [ ! -d "${EASY_RSA_DIR}" ]
 	then 
-		mkdir ${EASY_RSA_DIR} && \
-		ln -s /usr/share/easy-rsa/* ${EASY_RSA_DIR} && \
-		chmod -R 700 ${EASY_RSA_DIR}
+		mkdir "${EASY_RSA_DIR}" && \
+		ln -s /usr/share/easy-rsa/* "${EASY_RSA_DIR}" && \
+		chmod -R 700 "${EASY_RSA_DIR}"
 	fi
 }
 
@@ -62,7 +42,7 @@ function install_prerequisites () {
 function init_pki () {
 
 	check_easy_rsa_else_exit && \
-	cd ${EASY_RSA_DIR} && \
+	cd "${EASY_RSA_DIR}" && \
 	./easyrsa init-pki
 
 }
@@ -70,36 +50,15 @@ function init_pki () {
 # stage 3
 function create_certification_authority () {
 
-	check_easy_rsa_else_exit && cd ${EASY_RSA_DIR}
+	check_easy_rsa_else_exit && cd "${EASY_RSA_DIR}" || \
+	(echo_red "... # Could not pass into the ${EASY_RSA_DIR} ..." && exit 1)
 
-	read -e -p "What's your country ?:" -i "Ukraine" EASYRSA_REQ_COUNTRY
-	read -e -p "What's your province ?:" -i "Chernihiv" EASYRSA_REQ_PROVINCE
-	read -e -p "What's your city ?:" -i "Chernihiv" EASYRSA_REQ_CITY
-	read -e -p "What's your organistation ?:" -i "37WP" EASYRSA_REQ_ORG
-	read -e -p "What's your email ?:" -i "sasha192.bunin@gmail.com" EASYRSA_REQ_EMAIL
-	read -e -p "What's your organisational unit ?:" -i "Ukraine" EASYRSA_REQ_OU
-
-
-	# interactive part
-	echo -n "What's your country ?: "
-	read -r EASYRSA_REQ_COUNTRY
-	EASYRSA_REQ_COUNTRY=${EASYRSA_REQ_COUNTRY:Ukraine}
-
-	echo -n "What's your province ?: "
-	read -r EASYRSA_REQ_PROVINCE
-	EASYRSA_REQ_PROVINCE=${EASYRSA_REQ_PROVINCE:Chernihiv}
-
-	echo -n "What's your city ?: "
-	read -r EASYRSA_REQ_CITY
-
-	echo -n "What's your organistation ?: "
-	read -r EASYRSA_REQ_ORG
-
-	echo -n "What's your email ?: "
-	read -r EASYRSA_REQ_EMAIL
-
-	echo -n "What's your organisational unit ?: "
-	read -r EASYRSA_REQ_OU
+	read -r -e -p "What's your country ?:" -i "Ukraine" EASYRSA_REQ_COUNTRY
+	read -r -e -p "What's your province ?:" -i "Chernihiv" EASYRSA_REQ_PROVINCE
+	read -r -e -p "What's your city ?:" -i "Chernihiv" EASYRSA_REQ_CITY
+	read -r -e -p "What's your organisation ?:" -i "37WP" EASYRSA_REQ_ORG
+	read -r -e -p "What's your email ?:" -i "sasha192.bunin@gmail.com" EASYRSA_REQ_EMAIL
+	read -r -e -p "What's your organisational unit ?:" -i "Ukraine" EASYRSA_REQ_OU
 
 	EASYRSA_ALGO="ec"
 	EASYRSA_DIGEST="sha512"
@@ -152,19 +111,22 @@ function distribute_ca () {
     then
         echo_red "... 'update-ca-certificates' tool found ..." && \
         sudo cp /tmp/ca.crt /etc/pki/ca-trust/source/anchors/ && \
-        sudo update-ca-trust
+        sudo update-ca-trust && \
+        CA_UPDATED=1
     fi
   fi
 
+  # CHECK
+  if [ ${CA_UPDATED} == 0 ]
+  then
+    echo_red "... Could not update certificates ..." && \
+    exit 1
+  fi
 
 }
 
-
-
-
-
 $1 "${@:2}"
 check_last_else "cd ${PREV_DIR}"
-cd ${PREV_DIR}
+cd "${PREV_DIR}"
 
 

@@ -28,3 +28,5 @@ echo_red "... #1 Done ..."
 # login at the OpenVPN server
 # move the 'server.crt' and 'ca.crt' files to /etc/openvpn/server
 #
+# clean history
+history -c

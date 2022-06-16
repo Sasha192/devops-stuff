@@ -23,7 +23,7 @@ fi
 
 
 # step 1
-function install () {
+function install_prerequisites () {
 
 
 	sudo apt update && \
@@ -100,7 +100,8 @@ function pre_shared_keys_configuration () {
 ($1 "${@:2}" || check_last_else "cd ${PREV_DIR}")
 cd "${PREV_DIR}" || (echo "Could not pass into ${PREV_DIR}" && exit 1)
 
-
+# clean history
+history -c
 
 #
 #set +x

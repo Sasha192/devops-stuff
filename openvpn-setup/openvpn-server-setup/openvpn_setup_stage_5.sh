@@ -22,4 +22,6 @@ sudo cp ./server.conf /etc/openvpn/server/server.conf && \
 echo_red "... # server.conf unzipped ..." || \
 print_exit
 
+# clean history
+history -c
 

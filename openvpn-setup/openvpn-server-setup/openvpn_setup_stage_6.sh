@@ -81,5 +81,5 @@ ufw enable ||
 echo_red "... Could not restart ufw ..." && \
 exit 1
 
-
-
+# clean history
+history -c
