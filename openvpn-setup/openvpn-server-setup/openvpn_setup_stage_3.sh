@@ -1,5 +1,12 @@
 #!/bin/bash
 
+CURRENT_DIR="${PWD##*/}"
+
+if [[ ! "${CURRENT_DIR}" == "openvpn-server-setup" ]]
+then
+  echo "... Please, execute the bash script from its local directory ..."
+fi
+
 if [[ -z "${CA_CRT_FILE}" ]]; then
   CA_CRT_FILE="/tmp/ca.crt"
 fi

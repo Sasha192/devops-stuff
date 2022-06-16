@@ -1,12 +1,13 @@
 # OpenVPN server setup
-###Not completed
+###Not completed:
 
-actually, we can make two ways:
-1. existing one 
-2. already make changes to the base.conf and server.conf, since we need to make changes only there
+- openvpn_CA_sign_server_certificate.sh
+- openvpn_server_add_client.sh
 
 1. need to make it idempotent and fail resilient ? or
 2. just remove the folder and start again ? 
+
+### OpenVPN Server Setting Up:
 
 - stage 1 -- **Prerequisites and Infrastructure initialization**
   - installs all the prerequisites
@@ -30,3 +31,13 @@ actually, we can make two ways:
       so that we add an extra HMAC signature to all 
       SSL/TLS handshake packets for integrity verification
     - that key will be included into all our certificates
+
+- stage 5 -- **Importing pre-created server.conf**
+
+- stage 6 -- **Network configuration**
+    - Setting up traffic forwarding
+    - Setting up firewall
+    
+### OpenVPN Server Start Up
+- run **openvpn_run.sh**
+

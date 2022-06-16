@@ -31,7 +31,8 @@ function install () {
 	mkdir "$EASY_RSA_DIR" && \
 	ln -s /usr/share/easy-rsa/* $EASY_RSA_DIR && \
 	sudo chown "$(whoami)" "$EASY_RSA_DIR" && \
-	chmod 700 "$EASY_RSA_DIR"
+	chmod 700 "$EASY_RSA_DIR" ||
+	print_exit
 
 }
 
@@ -43,7 +44,8 @@ function create_vars () {
 	cd "$EASY_RSA_DIR" && \
 	touch vars && \
 	echo "set_var EASYRSA_ALGO \"ec\"" | tee vars && \
-	echo "set_var EASYRSA_DIGEST \"sha512\"" | tee -a vars
+	echo "set_var EASYRSA_DIGEST \"sha512\"" | tee -a vars ||
+	print_exit
 
 }
 
@@ -51,7 +53,8 @@ function create_vars () {
 function init_pki () {
 
 	cd "$EASY_RSA_DIR" && \
-	./easyrsa init-pki
+	./easyrsa init-pki ||
+	print_exit
 
 }
 
@@ -62,29 +65,33 @@ function certification_request_and_private_key () {
 	export EASYRSA_BATCH=1 && \
 	cd "${EASY_RSA_DIR}" && \
 	./easyrsa gen-req "${UNIQUE_HOST_SHORT_NAME}" nopass && \
-	sudo cp "${EASY_RSA_DIR}/pki/private/${UNIQUE_HOST_SHORT_NAME}.key /etc/openvpn/server/"
+	sudo cp "${EASY_RSA_DIR}/pki/private/${UNIQUE_HOST_SHORT_NAME}.key /etc/openvpn/server/" ||
+	print_exit
 
 }
 
 # step 5
 function send_certification_request () {
 
-	sshpass -p "${SCP_PASSWORD}" scp "${EASY_RSA_DIR}/pki/reqs/${UNIQUE_HOST_SHORT_NAME}.req" "${CA_USER}"@"${CA_HOST}":/tmp
+	sshpass -p "${SCP_PASSWORD}" scp "${EASY_RSA_DIR}/pki/reqs/${UNIQUE_HOST_SHORT_NAME}.req" "${CA_USER}"@"${CA_HOST}":/tmp ||
+	print_exit
 
 }
 
 function send_certification_request_from_arg () {
 
-	sshpass -p "${SCP_PASSWORD}" scp $1 "${CA_USER}"@"${CA_HOST}":/tmp
+	sshpass -p "${SCP_PASSWORD}" scp $1 "${CA_USER}"@"${CA_HOST}":/tmp ||
+	print_exit
 
 }
 
 # step 6: pre-shared-keys
 function pre_shared_keys_configuration () {
 
-	cd ${EASY_RSA_DIR} && \
+	cd "${EASY_RSA_DIR}" && \
 	openvpn --genkey --secret ta.key && \
-	sudo cp "${EASY_RSA_DIR}/ta.key" /etc/openvpn/server
+	sudo cp "${EASY_RSA_DIR}/ta.key" /etc/openvpn/server ||
+	print_exit
 
 }
 

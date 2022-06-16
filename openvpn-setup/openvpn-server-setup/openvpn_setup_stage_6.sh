@@ -1,5 +1,12 @@
 #!/bin/bash
 
+CURRENT_DIR="${PWD##*/}"
+
+if [[ ! "${CURRENT_DIR}" == "openvpn-server-setup" ]]
+then
+  echo "... Please, execute the bash script from its local directory ..."
+fi
+
 (source ../standard_functions.sh && \
 echo_red "... # ../standard_functions were imported ...") \
 || (echo "... # ../standard_functions were NOT imported ..." && exit 1)
@@ -39,7 +46,7 @@ fi
 
 INTERFACE=$(ip route list default | awk '{ print $5 }')
 
-cat <<EOF >> insert_at_the_beginning.txt
+cat <<EOF >> patch.before.rules
 # START OPENVPN RULES
 # NAT table rules
 *nat
@@ -50,14 +57,14 @@ COMMIT
 # END OPENVPN RULES
 EOF
 
-if [[ ! -f "./insert_at_the_beginning.txt" ]]
+if [[ ! -f "./patch.before.rules" ]]
 then
-  echo_red "... insert_at_the_beginning.txt file was not created ..."
+  echo_red "... patch.before.rules file was not created ..."
   echo_red "... please, check rights ..."
   exit 1
 fi
 
-(echo "$(cat insert_at_the_beginning.txt /etc/ufw/before.rules)" > /etc/ufw/before.rules) && \
+(echo "$(cat patch.before.rules /etc/ufw/before.rules)" > /etc/ufw/before.rules) && \
 echo_red "... # allow traffic from OpenVPN client to ${INTERFACE} ..."
 
 sed -i -e '/DEFAULT_FORWARD_POLICY=/ s/=.*/="ACCEPT"/' /etc/default/ufw && \

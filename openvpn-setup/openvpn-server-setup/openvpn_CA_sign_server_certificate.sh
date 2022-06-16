@@ -1,9 +1,14 @@
 #!/bin/bash
 
+CURRENT_DIR="${PWD##*/}"
+
+if [[ ! "${CURRENT_DIR}" == "openvpn-server-setup" ]]
+then
+  echo "... Please, execute the bash script from its local directory ..."
+fi
+
 EASY_RSA_DIR="/home/${USER}/easy-rsa"
-
-
-cd ${EASY_RSA_DIR} || (echo "Could not pass into ${EASY_RSA_DIR}" && exit 1)
+cd "${EASY_RSA_DIR}" || (echo "Could not pass into ${EASY_RSA_DIR}" && exit 1)
 
 
 # first import the certification request
