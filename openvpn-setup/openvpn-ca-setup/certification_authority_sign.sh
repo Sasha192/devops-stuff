@@ -1,5 +1,15 @@
 #!/bin/bash
 
+CURRENT_DIR="${PWD##*/}"
+
+if [[ ! "${CURRENT_DIR}" == "openvpn-ca-setup" ]]
+then
+  echo "... Please, execute the bash script from its local directory ..."
+fi
+
+(source ../standard_functions.sh && \
+echo_red "... # ../standard_functions were imported ...") \
+|| (echo "... # ../standard_functions were NOT imported ..." && exit 1)
 
 usage() {                                 # Function: Print a help message.
   echo "Usage: $0 [ -c CERTIFICATE_PATH ] [ -t TYPE: {client, server} ] " 1>&2
@@ -37,21 +47,14 @@ done
 if ! [[ "${#CERTIFICATE_PATH}" -eq 0 ]]; then exit_abnormal ; fi
 if ! [[ "${#TYPE}" -eq 0 ]]; then exit_abnormal ; fi
 
-EASY_RSA_DIR="/home/${USER}/easy-rsa"
+EASY_RSA_DIR="/home/${USER}/easy-rsa" && \
 cd "${EASY_RSA_DIR}" || (echo "Could not pass into ${EASY_RSA_DIR}" && exit 1)
 
-CERTIFICATION_NAME="$(basename ${CERTIFICATE_PATH} .crt)"
+CERTIFICATION_NAME=''$(basename "${CERTIFICATE_PATH}" .crt)''
 
-# csr importing
-./easyrsa import-req "${CERTIFICATE_PATH}" "${CERTIFICATION_NAME}"
-
-# csr signing
+./easyrsa import-req "${CERTIFICATE_PATH}" "${CERTIFICATION_NAME}" && \
 ./easyrsa sign-req ${TYPE} "${CERTIFICATION_NAME}" && \
-echo_red
-scp "./pki/issued/${CERTIFICATION_NAME}.crt" /tmp
-scp "./pki/ca.crt" /tmp
+scp "./pki/issued/${CERTIFICATION_NAME}.crt" /tmp && \
+scp "./pki/ca.crt" /tmp || \
+echo_red "... # Could not sign the CSR ..."
 
-
-# login at the OpenVPN server
-# move the 'server.crt' and 'ca.crt' files to /etc/openvpn/server
-#
