@@ -40,6 +40,9 @@ while getopts ":c:t:" options; do         # Loop: Get the next option;
 done
 shift $((OPTIND -1))
 
+echo "CERTIFICATE_PATH = ${CERTIFICATE_PATH}"
+echo "TYPE = ${TYPE}"
+
 if [[ "${#CERTIFICATE_PATH}" -eq 0 ]]; then exit_abnormal ; fi
 if [[ "${#TYPE}" -eq 0 ]]; then exit_abnormal ; fi
 
