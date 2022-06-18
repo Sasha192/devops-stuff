@@ -79,8 +79,8 @@ function send_certification_request () {
 
 function download_certificates () {
 
-	sshpass -p "${SCP_PASSWORD}" scp -o StrictHostKeyChecking=no "${CA_USER}"@"${CA_HOST}":/tmp/server.crt /tmp/${UNIQUE_HOST_SHORT_NAME}.crt && \
-  sshpass -p "${SCP_PASSWORD}" scp -o StrictHostKeyChecking=no "${CA_USER}"@"${CA_HOST}":/tmp/ca.crt /tmp/${UNIQUE_HOST_SHORT_NAME}.crt || \
+	(sshpass -p "${SCP_PASSWORD}" scp -o StrictHostKeyChecking=no "${CA_USER}"@"${CA_HOST}":/tmp/server.crt /tmp/${UNIQUE_HOST_SHORT_NAME}.crt && \
+  sshpass -p "${SCP_PASSWORD}" scp -o StrictHostKeyChecking=no "${CA_USER}"@"${CA_HOST}":/tmp/ca.crt /tmp/ca.crt) || \
 	(echo "... Could not execute download_certificates ..." && exit 1)
 
 
