@@ -22,49 +22,50 @@ function exit_abnormal() {                         # Function: Exit with error.
 
 CERTIFICATE_PATH=""
 TYPE=""
-VALID_ARGS=$(getopt -o c:t: --long certificate-request:,type: -- "$@")
 
-if [[ $? -ne 0 ]]; then
-    exit 1;
-fi
+#VALID_ARGS=$(getopt -o c:t: --long certificate-request:,type: -- "$@")
+#
+#if [[ $? -ne 0 ]]; then
+#    exit 1;
+#fi
+#
+#eval set -- "$VALID_ARGS"
+#while [ : ] ; do
+#  case "$1" in
+#    -c | --certificate-request)
+#        CERTIFICATE_PATH=${2}
+#        shift
+#        ;;
+#    -t | --type)
+#        TYPE=${2}
+#        if ! [[ "${TYPE}" =~ ^(client|server)$ ]]; then exit_abnormal ; fi
+#        shift
+#        ;;
+#    --) shift;
+#        break
+#        ;;
+#  esac
+#  shift
+#done
 
-eval set -- "$VALID_ARGS"
-while [ : ] ; do
-  case "$1" in
-    -c | --certificate-request)
-        CERTIFICATE_PATH=${2}
-        shift
-        ;;
-    -t | --type)
-        TYPE=${2}
-        if ! [[ "${TYPE}" =~ ^(client|server)$ ]]; then exit_abnormal ; fi
-        shift
-        ;;
-    --) shift;
-        break
-        ;;
+while getopts "c:t:" options; do         # Loop: Get the next option;
+  case $options in                    #
+    c) CERTIFICATE_PATH=$OPTARG
+      ;;
+    t)
+      TYPE=$OPTARG
+      if ! [[ "${TYPE}" =~ ^(client|server)$ ]]; then exit_abnormal ; fi
+    ;;
+    :)                                    # If expected argument omitted:
+      echo "Error: -$OPTARG requires an argument."
+      exit_abnormal                       # Exit abnormally.
+      ;;
+    *)                                    # If unknown (any other) option:
+      exit_abnormal                       # Exit abnormally.
+      ;;
   esac
 done
-
-#while getopts "ct:" options; do         # Loop: Get the next option;
-#  case "${options}" in                    #
-#    c)
-#      CERTIFICATE_PATH=${OPTARG}
-#      ;;
-#    t)
-#      TYPE=${OPTARG}
-#      if ! [[ "${TYPE}" =~ ^(client|server)$ ]]; then exit_abnormal ; fi
-#    ;;
-#    :)                                    # If expected argument omitted:
-#      echo "Error: -${OPTARG} requires an argument."
-#      exit_abnormal                       # Exit abnormally.
-#      ;;
-#    *)                                    # If unknown (any other) option:
-#      exit_abnormal                       # Exit abnormally.
-#      ;;
-#  esac
-#done
-#shift $((OPTIND -1))
+shift $((OPTIND -1))
 
 if [[ "${#CERTIFICATE_PATH}" -eq 0 ]]; then exit_abnormal ; fi
 if [[ "${#TYPE}" -eq 0 ]]; then exit_abnormal ; fi
