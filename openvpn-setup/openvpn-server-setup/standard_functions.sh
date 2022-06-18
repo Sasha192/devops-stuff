@@ -16,7 +16,7 @@ print_exit () {
     echo_red "... The last command was not successful ..."
     echo_red "... Please, check logs ..."
     echo "... Exit ..."
-    exit 1
+    return 1
 }
 
 check_last_else () {
@@ -34,7 +34,7 @@ check_last_else () {
 		echo_red "... Executing the last ELSE_CMD ..."
     bash -c "${ELSE_CMD}"
 		echo "... Exit ..."
-		exit 1
+		return 1
 	fi
 
 }
