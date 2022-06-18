@@ -17,7 +17,7 @@ usage() {                                 # Function: Print a help message.
 
 exit_abnormal() {                         # Function: Exit with error.
   usage
-  exit 1
+  return 1
 }
 
 CERTIFICATE_PATH=""
