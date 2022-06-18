@@ -9,7 +9,7 @@ then
 fi
 
 (. ../standard_functions.sh ) || \
-(echo "... # ../standard_functions were NOT imported ..." && exit 1)
+(echo "... # ../standard_functions were NOT imported ..." && return 1)
 
 function usage() {                                 # Function: Print a help message.
   echo "Usage: $0 [ -c  CERTIFICATE_PATH ] [ -t TYPE: {client, server} ] " 1>&2
@@ -46,7 +46,7 @@ if [[ "${#CERTIFICATE_PATH}" -eq 0 ]]; then exit_abnormal ; fi
 if [[ "${#TYPE}" -eq 0 ]]; then exit_abnormal ; fi
 
 EASY_RSA_DIR="/home/${USER}/easy-rsa" && \
-cd "${EASY_RSA_DIR}" || (echo "Could not pass into ${EASY_RSA_DIR}" && exit 1)
+cd "${EASY_RSA_DIR}" || (echo "Could not pass into ${EASY_RSA_DIR}" && return 1)
 
 CERTIFICATION_NAME=''$(basename "${CERTIFICATE_PATH}" .crt)''
 
@@ -54,7 +54,7 @@ CERTIFICATION_NAME=''$(basename "${CERTIFICATE_PATH}" .crt)''
 ./easyrsa sign-req "${TYPE}" "${CERTIFICATION_NAME}" && \
 scp "./pki/issued/${CERTIFICATION_NAME}.crt" /tmp && \
 scp "./pki/ca.crt" /tmp) || \
-(echo_red "... # Could not sign the CSR ..." && exit 1)
+(echo_red "... # Could not sign the CSR ..." && return 1)
 cd "${PREV_PATH}" || echo_red "... # Could not pass into the ${PREV_PATH} ..."
 echo_red "... Done ..."
 
