@@ -14,12 +14,18 @@ then
   echo "... Please, execute the bash script from its local directory ..."
 fi
 
-(source standard_functions.sh && \
-echo_red "... # standard_functions were imported ...") \
+(. ../standard_functions.sh) \
 || (echo "... # standard_functions were NOT imported ..." && exit 1)
 
-sudo cp ./server.conf /etc/openvpn/server/server.conf && \
-echo_red "... # server.conf unzipped ..." || \
+function print_exit () {
+    echo_red "... The last command was not successful ..."
+    echo_red "... Please, check logs ..."
+    echo "... Exit ..."
+    exit 1
+}
+
+(sudo cp ./server.conf /etc/openvpn/server/server.conf && \
+echo_red "... # server.conf unzipped ...") || \
 print_exit
 
 # clean history

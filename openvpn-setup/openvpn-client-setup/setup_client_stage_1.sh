@@ -18,6 +18,9 @@ then
   echo "... Please, execute the bash script from its local directory ..."
 fi
 
+(. ../standard_functions.sh ) \
+|| (echo "... # ../standard_functions were NOT imported ..." && exit 1)
+
 if [[ -z "${CA_USER}" ]]; then
   echo_red "... ERROR ..."
   echo "... CA_USER env variable was not specified ..."
@@ -42,9 +45,12 @@ if [[ -z "${SCP_PASSWORD}" ]]; then
   return 1
 fi
 
-(source ../standard_functions.sh && \
-echo_red "... # ../standard_functions were imported ...") \
-|| (echo "... # ../standard_functions were NOT imported ..." && exit 1)
+function print_exit () {
+    echo_red "... The last command was not successful ..."
+    echo_red "... Please, check logs ..."
+    echo "... Exit ..."
+    exit 1
+}
 
 usage() {
   echo "Usage: $0 [ -c CLIENT_NAME ]; OR CLIENT_NAME env variable must be specified" 1>&2

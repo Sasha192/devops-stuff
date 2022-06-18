@@ -39,23 +39,23 @@ if [[ -z "${SCP_PASSWORD}" ]]; then
 fi
 
 echo_red "... #1 OpenVPN installation ..."
-(. ./openvpn_stages.sh install_prerequisites) || print_exit
+(. ./openvpn_stages.sh install_prerequisites)
 echo_red "... #1 Done ..."
 
 echo_red "... #2 Exporting vars ..."
-(. ./openvpn_stages.sh create_vars) || print_exit
+(. ./openvpn_stages.sh create_vars) || (echo_red "... # Could not execute #2 stage ..." && exit 1)
 echo_red "... #2 Done ..."
 
 echo_red "... #3 PKI creation ..."
-(. ./openvpn_stages.sh init_pki) || print_exit
+(. ./openvpn_stages.sh init_pki) || (echo_red "... # Could not execute #3 stage ..." && exit 1)
 echo_red "... #3 Done ..."
 
 echo_red "... #4 Create certification request and private key ..."
-(. ./openvpn_stages.sh certification_request_and_private_key) || print_exit
+(. ./openvpn_stages.sh certification_request_and_private_key) || (echo_red "... # Could not execute #4 stage ..." && exit 1)
 echo_red "... #4 Done ..."
 
 echo_red "... #5 Sending certification request..."
-(. ./openvpn_stages.sh send_certification_request) || print_exit
+(. ./openvpn_stages.sh send_certification_request) || (echo_red "... # Could not execute #5 stage ..." && exit 1)
 echo_red "... #5 Done ..."
 
 

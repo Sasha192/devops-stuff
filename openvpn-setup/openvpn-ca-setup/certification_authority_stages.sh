@@ -11,9 +11,8 @@ USER=$(whoami)
 EASY_RSA_DIR="/home/${USER}/easy-rsa"
 PREV_DIR=$(pwd)
 
-(source ../standard_functions.sh && \
-echo_red "... # ../standard_functions were imported ...") \
-|| (echo "... # ../standard_functions were NOT imported ..." && exit 1)
+(. ../standard_functions.sh ) || \
+(echo "... # ../standard_functions were NOT imported ..." && exit 1)
 
 function check_easy_rsa_else_exit () {
 

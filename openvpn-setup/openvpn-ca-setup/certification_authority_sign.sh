@@ -7,8 +7,7 @@ then
   echo "... Please, execute the bash script from its local directory ..."
 fi
 
-(source ../standard_functions.sh && \
-echo_red "... # ../standard_functions were imported ...") \
+(. ../standard_functions.sh ) \
 || (echo "... # ../standard_functions were NOT imported ..." && exit 1)
 
 usage() {                                 # Function: Print a help message.

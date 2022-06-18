@@ -7,6 +7,9 @@ then
   echo "... Please, execute the bash script from its local directory ..."
 fi
 
+(. ../standard_functions.sh) \
+|| (echo "... # standard_functions were NOT imported ..." && exit 1)
+
 if [[ -z "${CA_CRT_FILE}" ]]; then
   CA_CRT_FILE="/tmp/ca.crt"
 fi
@@ -14,6 +17,13 @@ fi
 if [[ -z "${SERVER_CRT_FILE}" ]]; then
   SERVER_CRT_FILE="/tmp/server.crt"
 fi
+
+function print_exit () {
+    echo_red "... The last command was not successful ..."
+    echo_red "... Please, check logs ..."
+    echo "... Exit ..."
+    exit 1
+}
 
 # TODO: why it can't be deployed ?
 (source standard_functions.sh && \

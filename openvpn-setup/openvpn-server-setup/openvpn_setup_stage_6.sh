@@ -7,8 +7,7 @@ then
   echo "... Please, execute the bash script from its local directory ..."
 fi
 
-(source standard_functions.sh && \
-echo_red "... # standard_functions were imported ...") \
+(. ../standard_functions.sh) \
 || (echo "... # standard_functions were NOT imported ..." && exit 1)
 
 if [ "$(id -u)" -ne 0 ]
@@ -16,6 +15,13 @@ then
   echo_red "... Please run as root ..."
   exit 1
 fi
+
+function print_exit () {
+    echo_red "... The last command was not successful ..."
+    echo_red "... Please, check logs ..."
+    echo "... Exit ..."
+    exit 1
+}
 
 # setting up traffic forwarding:
 

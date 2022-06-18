@@ -1,1 +1,4 @@
 /.idea/
+/nmap/scan.json
+/nmap/scan.xml
+/nmap/hosts_addr.json
