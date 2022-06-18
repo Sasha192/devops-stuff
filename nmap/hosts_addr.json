@@ -1,14 +1,14 @@
 [
     {
-        "host_name": "ubuntu3",
-        "host_address": "192.168.31.115"
+        "host_name": "ubuntu4",
+        "host_address": "192.168.31.99"
     },
     {
         "host_name": "ubuntu1",
-        "host_address": "192.168.31.153"
+        "host_address": "192.168.31.152"
     },
     {
         "host_name": "ubuntu2",
-        "host_address": "192.168.31.247"
+        "host_address": "192.168.31.246"
     }
 ]
