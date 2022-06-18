@@ -29,14 +29,14 @@ if [[ $? -ne 0 ]]; then
 fi
 
 eval set -- "$VALID_ARGS"
-while true ; do
+while [ : ] ; do
   case "$1" in
     -c | --certificate-request)
-        CERTIFICATE_PATH=${OPTARG}
+        CERTIFICATE_PATH=${2}
         shift
         ;;
     -t | --type)
-        TYPE=${OPTARG}
+        TYPE=${2}
         if ! [[ "${TYPE}" =~ ^(client|server)$ ]]; then exit_abnormal ; fi
         shift
         ;;
