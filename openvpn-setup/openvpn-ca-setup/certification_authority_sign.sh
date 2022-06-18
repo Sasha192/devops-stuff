@@ -20,9 +20,6 @@ exit_abnormal() {                         # Function: Exit with error.
   return 1
 }
 
-CERTIFICATE_PATH=""
-TYPE=""
-
 while getopts ":c:t:" options; do         # Loop: Get the next option;
   case $options in                    #
     c) CERTIFICATE_PATH=$OPTARG
@@ -38,10 +35,6 @@ while getopts ":c:t:" options; do         # Loop: Get the next option;
       ;;
   esac
 done
-shift $((OPTIND -1))
-
-echo "CERTIFICATE_PATH = ${CERTIFICATE_PATH}"
-echo "TYPE = ${TYPE}"
 
 if [[ "${#CERTIFICATE_PATH}" -eq 0 ]]; then exit_abnormal ; fi
 if [[ "${#TYPE}" -eq 0 ]]; then exit_abnormal ; fi
