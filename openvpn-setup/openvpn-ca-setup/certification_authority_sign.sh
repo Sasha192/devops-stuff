@@ -39,7 +39,7 @@ if [[ "${#TYPE}" -eq 0 ]]; then exit_abnormal ; fi
 EASY_RSA_DIR="/home/${USER}/easy-rsa" && \
 cd "${EASY_RSA_DIR}" || (echo "Could not pass into ${EASY_RSA_DIR}" && return 1)
 
-CERTIFICATION_NAME=''$(basename "${CERTIFICATE_PATH}" .crt)''
+CERTIFICATION_NAME=''$(basename "${CERTIFICATE_PATH}" .req)''
 
 (./easyrsa import-req "${CERTIFICATE_PATH}" "${CERTIFICATION_NAME}" && \
 ./easyrsa sign-req "${TYPE}" "${CERTIFICATION_NAME}" && \
