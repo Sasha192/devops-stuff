@@ -65,7 +65,7 @@ function certification_request_and_private_key () {
 	(export EASYRSA_BATCH=1 && \
 	cd "${EASY_RSA_DIR}" && \
 	./easyrsa gen-req "${UNIQUE_HOST_SHORT_NAME}" nopass && \
-	sudo cp "${EASY_RSA_DIR}/pki/private/${UNIQUE_HOST_SHORT_NAME}.key /etc/openvpn/server/${UNIQUE_HOST_SHORT_NAME}.key") || \
+	sudo cp "${EASY_RSA_DIR}/pki/private/${UNIQUE_HOST_SHORT_NAME}.key" "/etc/openvpn/server/${UNIQUE_HOST_SHORT_NAME}.key") || \
 	print_exit
 
 }
