@@ -11,11 +11,11 @@ fi
 (. ../standard_functions.sh ) || \
 (echo "... # ../standard_functions were NOT imported ..." && return 1)
 
-function usage() {                                 # Function: Print a help message.
+usage() {                                 # Function: Print a help message.
   echo "Usage: $0 [ -c  CERTIFICATE_PATH ] [ -t TYPE: {client, server} ] " 1>&2
 }
 
-function exit_abnormal() {                         # Function: Exit with error.
+exit_abnormal() {                         # Function: Exit with error.
   usage
   return 1
 }
@@ -23,13 +23,11 @@ function exit_abnormal() {                         # Function: Exit with error.
 CERTIFICATE_PATH=""
 TYPE=""
 
-while getopts "c:t:" options; do         # Loop: Get the next option;
+while getopts ":c:t:" options; do         # Loop: Get the next option;
   case $options in                    #
     c) CERTIFICATE_PATH=$OPTARG
       ;;
-    t)
-      TYPE=$OPTARG
-      if ! [[ "${TYPE}" =~ ^(client|server)$ ]]; then exit_abnormal ; fi
+    t) TYPE=$OPTARG
     ;;
     :)                                    # If expected argument omitted:
       echo "Error: -$OPTARG requires an argument."
