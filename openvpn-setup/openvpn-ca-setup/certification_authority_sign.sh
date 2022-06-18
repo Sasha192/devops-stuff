@@ -43,8 +43,10 @@ CERTIFICATION_NAME=''$(basename "${CERTIFICATE_PATH}" .req)''
 
 (./easyrsa import-req "${CERTIFICATE_PATH}" "${CERTIFICATION_NAME}" && \
 ./easyrsa sign-req "${TYPE}" "${CERTIFICATION_NAME}" && \
-scp "./pki/issued/${CERTIFICATION_NAME}.crt" /tmp && \
-scp "./pki/ca.crt" /tmp) || \
+scp "./pki/issued/${CERTIFICATION_NAME}.crt" "/tmp/${CERTIFICATION_NAME}.crt" && \
+chmod -R 777 "/tmp/${CERTIFICATION_NAME}.crt" && \
+scp "./pki/ca.crt" /tmp/ca.crt) && \
+chmod -R 777 "/tmp/ca.crt" || \
 (echo_red "... # Could not sign the CSR ..." && return 1)
 cd "${PREV_PATH}" || echo_red "... # Could not pass into the ${PREV_PATH} ..."
 echo_red "... Done ..."

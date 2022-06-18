@@ -71,8 +71,18 @@ function certification_request_and_private_key () {
 # step 5
 function send_certification_request () {
 
-	sshpass -p "${SCP_PASSWORD}" scp -o StrictHostKeyChecking=no "${EASY_RSA_DIR}/pki/reqs/${UNIQUE_HOST_SHORT_NAME}.req" "${CA_USER}"@"${CA_HOST}":/tmp ||
-	print_exit
+	(sshpass -p "${SCP_PASSWORD}" scp -o StrictHostKeyChecking=no "${EASY_RSA_DIR}/pki/reqs/${UNIQUE_HOST_SHORT_NAME}.req" "${CA_USER}"@"${CA_HOST}":/tmp/${UNIQUE_HOST_SHORT_NAME}.req && \
+	sshpass -p "${SCP_PASSWORD}" ssh -o StrictHostKeyChecking=no "${CA_USER}"@"${CA_HOST}" "chmod -R 777 /tmp/${UNIQUE_HOST_SHORT_NAME}.req") || \
+	(echo "... Could not execute send_certification_request ..." && exit 1)
+
+}
+
+function download_certificates () {
+
+	sshpass -p "${SCP_PASSWORD}" scp -o StrictHostKeyChecking=no "${CA_USER}"@"${CA_HOST}":/tmp/server.crt /tmp/${UNIQUE_HOST_SHORT_NAME}.crt && \
+  sshpass -p "${SCP_PASSWORD}" scp -o StrictHostKeyChecking=no "${CA_USER}"@"${CA_HOST}":/tmp/ca.crt /tmp/${UNIQUE_HOST_SHORT_NAME}.crt || \
+	(echo "... Could not execute download_certificates ..." && exit 1)
+
 
 }
 
