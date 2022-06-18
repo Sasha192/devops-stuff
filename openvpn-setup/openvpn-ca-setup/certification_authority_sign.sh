@@ -1,7 +1,7 @@
 #!/bin/bash
 
 CURRENT_DIR="${PWD##*/}"
-PREV_PATH="$(PWD)"
+PREV_PATH="$(pwd)"
 
 if [[ ! "${CURRENT_DIR}" == "openvpn-ca-setup" ]]
 then
