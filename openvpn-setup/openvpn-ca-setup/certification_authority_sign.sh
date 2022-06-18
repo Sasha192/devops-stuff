@@ -8,8 +8,8 @@ then
   echo "... Please, execute the bash script from its local directory ..."
 fi
 
-(. ../standard_functions.sh ) \
-|| (echo "... # ../standard_functions were NOT imported ..." && exit 1)
+(. ../standard_functions.sh ) || \
+(echo "... # ../standard_functions were NOT imported ..." && exit 1)
 
 function usage() {                                 # Function: Print a help message.
   echo "Usage: $0 [ -c  CERTIFICATE_PATH ] [ -t TYPE: {client, server} ] " 1>&2
