@@ -23,31 +23,6 @@ function exit_abnormal() {                         # Function: Exit with error.
 CERTIFICATE_PATH=""
 TYPE=""
 
-#VALID_ARGS=$(getopt -o c:t: --long certificate-request:,type: -- "$@")
-#
-#if [[ $? -ne 0 ]]; then
-#    exit 1;
-#fi
-#
-#eval set -- "$VALID_ARGS"
-#while [ : ] ; do
-#  case "$1" in
-#    -c | --certificate-request)
-#        CERTIFICATE_PATH=${2}
-#        shift
-#        ;;
-#    -t | --type)
-#        TYPE=${2}
-#        if ! [[ "${TYPE}" =~ ^(client|server)$ ]]; then exit_abnormal ; fi
-#        shift
-#        ;;
-#    --) shift;
-#        break
-#        ;;
-#  esac
-#  shift
-#done
-
 while getopts "c:t:" options; do         # Loop: Get the next option;
   case $options in                    #
     c) CERTIFICATE_PATH=$OPTARG
