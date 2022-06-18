@@ -51,7 +51,7 @@ cd "${EASY_RSA_DIR}" || (echo "Could not pass into ${EASY_RSA_DIR}" && exit 1)
 CERTIFICATION_NAME=''$(basename "${CERTIFICATE_PATH}" .crt)''
 
 (./easyrsa import-req "${CERTIFICATE_PATH}" "${CERTIFICATION_NAME}" && \
-./easyrsa sign-req ${TYPE} "${CERTIFICATION_NAME}" && \
+./easyrsa sign-req "${TYPE}" "${CERTIFICATION_NAME}" && \
 scp "./pki/issued/${CERTIFICATION_NAME}.crt" /tmp && \
 scp "./pki/ca.crt" /tmp) || \
 (echo_red "... # Could not sign the CSR ..." && exit 1)
