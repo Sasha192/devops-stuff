@@ -47,15 +47,16 @@ done
 if ! [[ "${#CERTIFICATE_PATH}" -eq 0 ]]; then exit_abnormal ; fi
 if ! [[ "${#TYPE}" -eq 0 ]]; then exit_abnormal ; fi
 
-EASY_RSA_DIR="/home/${USER}/easy-rsa" && \
-cd "${EASY_RSA_DIR}" || (echo "Could not pass into ${EASY_RSA_DIR}" && exit 1)
-
-CERTIFICATION_NAME=''$(basename "${CERTIFICATE_PATH}" .crt)''
-
-./easyrsa import-req "${CERTIFICATE_PATH}" "${CERTIFICATION_NAME}" && \
-./easyrsa sign-req ${TYPE} "${CERTIFICATION_NAME}" && \
-scp "./pki/issued/${CERTIFICATION_NAME}.crt" /tmp && \
-scp "./pki/ca.crt" /tmp || \
-echo_red "... # Could not sign the CSR ..."
-cd "${PREV_PATH}" || echo_red "... # Could not pass into the ${PREV_PATH} ..."
+#EASY_RSA_DIR="/home/${USER}/easy-rsa" && \
+#cd "${EASY_RSA_DIR}" || (echo "Could not pass into ${EASY_RSA_DIR}" && exit 1)
+#
+#CERTIFICATION_NAME=''$(basename "${CERTIFICATE_PATH}" .crt)''
+#
+#(./easyrsa import-req "${CERTIFICATE_PATH}" "${CERTIFICATION_NAME}" && \
+#./easyrsa sign-req ${TYPE} "${CERTIFICATION_NAME}" && \
+#scp "./pki/issued/${CERTIFICATION_NAME}.crt" /tmp && \
+#scp "./pki/ca.crt" /tmp) || \
+#(echo_red "... # Could not sign the CSR ..." && exit 1)
+#cd "${PREV_PATH}" || echo_red "... # Could not pass into the ${PREV_PATH} ..."
+#echo_red "... Done ..."
 
