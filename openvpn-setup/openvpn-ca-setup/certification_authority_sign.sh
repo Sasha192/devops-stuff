@@ -25,13 +25,10 @@ while getopts ":c:t:" options; do         # Loop: Get the next option;
     c) CERTIFICATE_PATH=$OPTARG
       ;;
     t) TYPE=$OPTARG
-    ;;
-    :)                                    # If expected argument omitted:
-      echo "Error: -$OPTARG requires an argument."
-      exit_abnormal                       # Exit abnormally.
       ;;
-    *)                                    # If unknown (any other) option:
-      exit_abnormal                       # Exit abnormally.
+    : | *)                                    # If unknown (any other) option:
+      usage
+      return 1
       ;;
   esac
 done
