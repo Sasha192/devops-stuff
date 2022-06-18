@@ -1,6 +1,7 @@
 #!/bin/bash
 
 CURRENT_DIR="${PWD##*/}"
+PREV_PATH="$(PWD)"
 
 if [[ ! "${CURRENT_DIR}" == "openvpn-ca-setup" ]]
 then
@@ -56,4 +57,5 @@ CERTIFICATION_NAME=''$(basename "${CERTIFICATE_PATH}" .crt)''
 scp "./pki/issued/${CERTIFICATION_NAME}.crt" /tmp && \
 scp "./pki/ca.crt" /tmp || \
 echo_red "... # Could not sign the CSR ..."
+cd "${PREV_PATH}" || echo_red "... # Could not pass into the ${PREV_PATH} ..."
 
