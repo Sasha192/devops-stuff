@@ -5,21 +5,21 @@
 #  - use echo_green for success logging
 #  - use echo_yellow for info logging
 
-function echo_red () {
+echo_red () {
    RED='\033[0;31m'
    NC='\033[0m'
    echo -e "${RED}$1${NC}"
    echo -e "\n"
 }
 
-function print_exit () {
+print_exit () {
     echo_red "... The last command was not successful ..."
     echo_red "... Please, check logs ..."
     echo "... Exit ..."
     exit 1
 }
 
-function check_last_else () {
+check_last_else () {
 
 	ELSE_CMD="echo"
 	if [ -z "$1" ]
