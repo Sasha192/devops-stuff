@@ -7,9 +7,9 @@ USER=$(whoami)
 EASY_RSA_DIR="/home/${USER}/easy-rsa"
 PREV_DIR=$(pwd)
 
-(source ../standard_functions.sh && \
-echo_red "... # ../standard_functions were imported ...") \
-|| (echo "... # ../standard_functions were NOT imported ..." && exit 1)
+(source standard_functions.sh && \
+echo_red "... # standard_functions were imported ...") \
+|| (echo "... # standard_functions were NOT imported ..." && exit 1)
 
 UNIQUE_HOST_SHORT_NAME="${UNIQUE_HOST_SHORT_NAME}"
 CA_USER=${CA_USER}

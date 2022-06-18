@@ -16,9 +16,9 @@ if [[ -z "${SERVER_CRT_FILE}" ]]; then
 fi
 
 # TODO: why it can't be deployed ?
-(source ../standard_functions.sh && \
-echo_red "... # ../standard_functions were imported ...") \
-|| (echo "... # ../standard_functions were NOT imported ..." && exit 1)
+(source standard_functions.sh && \
+echo_red "... # standard_functions were imported ...") \
+|| (echo "... # standard_functions were NOT imported ..." && exit 1)
 
 echo_red "... #1 mv ca.crt and server.crt files to /etc/openvpn/server"
 (sudo mv "${CA_CRT_FILE}" "/etc/openvpn/server/ca.crt" && \

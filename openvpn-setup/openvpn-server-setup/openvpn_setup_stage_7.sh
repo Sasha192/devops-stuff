@@ -9,9 +9,9 @@ then
   echo "... Please, execute the bash script from its local directory ..."
 fi
 
-(source ../standard_functions.sh && \
-echo_red "... # ../standard_functions were imported ...") \
-|| (echo "... # ../standard_functions were NOT imported ..." && exit 1)
+(source standard_functions.sh && \
+echo_red "... # standard_functions were imported ...") \
+|| (echo "... # standard_functions were NOT imported ..." && exit 1)
 
 USER_CERT_INFRA="/home/${USER}/client_cert"
 
