@@ -12,7 +12,7 @@ fi
 || (echo "... # ../standard_functions were NOT imported ..." && exit 1)
 
 function usage() {                                 # Function: Print a help message.
-  echo "Usage: $0 [ -c CERTIFICATE_PATH ] [ -t TYPE: {client, server} ] " 1>&2
+  echo "Usage: $0 [ -c  CERTIFICATE_PATH ] [ -t TYPE: {client, server} ] " 1>&2
 }
 
 function exit_abnormal() {                         # Function: Exit with error.
@@ -22,27 +22,49 @@ function exit_abnormal() {                         # Function: Exit with error.
 
 CERTIFICATE_PATH=""
 TYPE=""
+VALID_ARGS=$(getopt -o c:t: --long certificate-request:,type: -- "$@")
 
-while getopts "ct:" options; do         # Loop: Get the next option;
-                                          # use silent error checking;
-                                          # options n and t take arguments.
-  case "${options}" in                    #
-    c)
-      CERTIFICATE_PATH=${OPTARG}
-      ;;
-    t)
-      TYPE=${OPTARG}
-      if ! [[ "${TYPE}" =~ ^(client|server)$ ]]; then exit_abnormal ; fi
-    ;;
-    :)                                    # If expected argument omitted:
-      echo "Error: -${OPTARG} requires an argument."
-      exit_abnormal                       # Exit abnormally.
-      ;;
-    *)                                    # If unknown (any other) option:
-      exit_abnormal                       # Exit abnormally.
-      ;;
+if [[ $? -ne 0 ]]; then
+    exit 1;
+fi
+
+eval set -- "$VALID_ARGS"
+while true ; do
+  case "$1" in
+    -c | --certificate-request)
+        CERTIFICATE_PATH=${OPTARG}
+        shift
+        ;;
+    -t | --type)
+        TYPE=${OPTARG}
+        if ! [[ "${TYPE}" =~ ^(client|server)$ ]]; then exit_abnormal ; fi
+        shift
+        ;;
+    --) shift;
+        break
+        ;;
   esac
 done
+
+#while getopts "ct:" options; do         # Loop: Get the next option;
+#  case "${options}" in                    #
+#    c)
+#      CERTIFICATE_PATH=${OPTARG}
+#      ;;
+#    t)
+#      TYPE=${OPTARG}
+#      if ! [[ "${TYPE}" =~ ^(client|server)$ ]]; then exit_abnormal ; fi
+#    ;;
+#    :)                                    # If expected argument omitted:
+#      echo "Error: -${OPTARG} requires an argument."
+#      exit_abnormal                       # Exit abnormally.
+#      ;;
+#    *)                                    # If unknown (any other) option:
+#      exit_abnormal                       # Exit abnormally.
+#      ;;
+#  esac
+#done
+#shift $((OPTIND -1))
 
 if [[ "${#CERTIFICATE_PATH}" -eq 0 ]]; then exit_abnormal ; fi
 if [[ "${#TYPE}" -eq 0 ]]; then exit_abnormal ; fi
