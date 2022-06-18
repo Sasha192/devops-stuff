@@ -44,8 +44,8 @@ while getopts "ct:" options; do         # Loop: Get the next option;
   esac
 done
 
-if ! [[ "${#CERTIFICATE_PATH}" -eq 0 ]]; then exit_abnormal ; fi
-if ! [[ "${#TYPE}" -eq 0 ]]; then exit_abnormal ; fi
+if [[ "${#CERTIFICATE_PATH}" -eq 0 ]]; then exit_abnormal ; fi
+if [[ "${#TYPE}" -eq 0 ]]; then exit_abnormal ; fi
 
 #EASY_RSA_DIR="/home/${USER}/easy-rsa" && \
 #cd "${EASY_RSA_DIR}" || (echo "Could not pass into ${EASY_RSA_DIR}" && exit 1)
