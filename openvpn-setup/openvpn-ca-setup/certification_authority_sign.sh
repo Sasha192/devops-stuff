@@ -22,7 +22,7 @@ exit_abnormal() {                         # Function: Exit with error.
 CERTIFICATE_PATH=""
 TYPE=""
 
-while getopts "c:t:" options; do         # Loop: Get the next option;
+while getopts "ct:" options; do         # Loop: Get the next option;
                                           # use silent error checking;
                                           # options n and t take arguments.
   case "${options}" in                    #
