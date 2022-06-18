@@ -39,7 +39,7 @@ function create_client_configuration_infra () {
 
 	sudo cp "${EASY_RSA_DIR}/ta.key" "${USER_CERT_INFRA}" && \
   sudo cp /etc/openvpn/server/ca.crt "${USER_CERT_INFRA}" && \
-  sudo chown "${USER}" "${USER_CERT_INFRA}"
+  sudo chown -R "${USER}" "${USER_CERT_INFRA}"
 
 
 }
