@@ -10,13 +10,13 @@ then
 fi
 
 (. ../standard_functions.sh ) \
-|| (echo "... # standard_functions were NOT imported ..." && exit 1)
+|| (echo "... # standard_functions were NOT imported ..." && return 1)
 
 function print_exit () {
     echo_red "... The last command was not successful ..."
     echo_red "... Please, check logs ..."
     echo "... Exit ..."
-    exit 1
+    return 1
 }
 
 USER_CERT_INFRA="/home/${USER}/client_cert"
@@ -45,9 +45,8 @@ function create_client_configuration_infra () {
 }
 
 echo_red "... #1 Started ..."
-create_client_configuration_infra || print_exit
+create_client_configuration_infra || (echo_red "... Could not Client Configuration Infrastructure ..." && return 1)
 echo_red "... #1 Done"
-echo "... Please, do the "
 
 
 # https://www.digitalocean.com/community/tutorials/how-to-set-up-and-configure-an-openvpn-server-on-ubuntu-20-04-ru#11
