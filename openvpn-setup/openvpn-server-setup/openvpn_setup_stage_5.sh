@@ -25,7 +25,7 @@ function print_exit () {
 }
 
 (sudo cp ./server.conf /etc/openvpn/server/server.conf && \
-echo_red "... # server.conf unzipped ...") || \
+echo_red "... # server.conf was set up ...") || \
 print_exit
 
 # clean history

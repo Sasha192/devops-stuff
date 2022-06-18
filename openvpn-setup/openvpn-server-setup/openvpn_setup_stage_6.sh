@@ -13,7 +13,7 @@ fi
 if [ "$(id -u)" -ne 0 ]
 then
   echo_red "... Please run as root ..."
-  exit 1
+  return 1
 fi
 
 function print_exit () {
@@ -30,14 +30,14 @@ echo_red "... #1 setting up traffic forwarding ..."
 if [[ ! -f "/etc/sysctl.conf" ]]
 then
   echo_red "... Could not find /etc/sysctl.conf ..."
-  exit 1
+  return 1
 fi
 
 echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.conf && \
 sysctl -p && \
 echo_red "... #1 Done ..." && \
 echo_red "... Please, check that ip_forward works by yourself ..." ||
-exit 1
+return 1
 
 
 # setting up firewall:
@@ -47,7 +47,7 @@ echo_red "... #2 setting up firewall ..."
 if ! command -v ufw &> /dev/null
 then
     echo_red "... ufw could not be found ..."
-    exit
+    return
 fi
 
 INTERFACE=$(ip route list default | awk '{ print $5 }')
@@ -67,25 +67,25 @@ if [[ ! -f "./patch.before.rules" ]]
 then
   echo_red "... patch.before.rules file was not created ..."
   echo_red "... please, check rights ..."
-  exit 1
+  return 1
 fi
 
 (echo "$(cat patch.before.rules /etc/ufw/before.rules)" > /etc/ufw/before.rules) && \
-echo_red "... # allow traffic from OpenVPN client to ${INTERFACE} ..."
+echo_red "... # allowed traffic from OpenVPN client to ${INTERFACE} ..."
 
-sed -i -e '/DEFAULT_FORWARD_POLICY=/ s/=.*/="ACCEPT"/' /etc/default/ufw && \
-echo_red "... ACCEPT forward policy was set up ..." || \
-print_exit
+(sed -i -e '/DEFAULT_FORWARD_POLICY=/ s/=.*/="ACCEPT"/' /etc/default/ufw && \
+echo_red "... ACCEPT forward policy was set up ...") || \
+(echo_red "... # Could not ACCEPT forward policy ..." && return 1)
 
-ufw allow 1194/udp && \
-ufw allow OpenSSH && \
+(ufw allow 1194/udp && \
+ufw allow OpenSSH) && \
 echo_red "... # allowed 1194/udp and OpenSSH ..." || \
-print_exit
+(echo_red "... # Could not allow udp and OpenSSH on ufw  ..." && return 1)
 
-ufw disable && \
-ufw enable ||
+(ufw disable && \
+ufw enable) ||
 echo_red "... Could not restart ufw ..." && \
-exit 1
+return 1
 
 # clean history
 history -c
