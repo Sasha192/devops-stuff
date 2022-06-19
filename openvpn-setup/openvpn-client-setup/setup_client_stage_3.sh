@@ -18,30 +18,27 @@ usage() {
   echo "Usage: $0 [ -a OPENVPN_SERVER_ADDRESS ] [ -c CLIENT_NAME ]" 1>&2
 }
 
-exit_abnormal() {                         # Function: Exit with error.
-  usage
-  return 1
-}
-
-  while getopts "a:c" options; do         # Loop: Get the next option;
-                                            # use silent error checking;
-                                            # options n and t take arguments.
-    case "${options}" in                    #
-      c)
-        CLIENT_NAME=${OPTARG}
+  while getopts ":a:c:" options; do
+    case $options in
+      c) CLIENT_NAME=$OPTARG
         ;;
-      a)
-        OPENVPN_SERVER_ADDRESS=${OPTARG}
+      a) OPENVPN_SERVER_ADDRESS=$OPTARG
         ;;
-      : | *)                                    # If unknown (any other) option:
+      : | *)
         usage
-        return 1                       # Exit abnormally.
+        return 1
         ;;
     esac
   done
 
-if ! [[ "${#CLIENT_NAME}" -eq 0 ]]; then exit_abnormal ; fi
-if ! [[ "${#OPENVPN_SERVER_ADDRESS}" -eq 0 ]]; then exit_abnormal ; fi
+if [[ "${#CLIENT_NAME}" -eq 0 ]]; then
+  usage
+  return 1
+fi
+if [[ "${#OPENVPN_SERVER_ADDRESS}" -eq 0 ]]; then
+  usage
+  return 1
+fi
 
 
 sed -i ''s/OPENVPN_SERVER_PUBLIC_IP/"${OPENVPN_SERVER_ADDRESS}"/g'' ./base.conf
@@ -50,13 +47,13 @@ sed -i ''s/OPENVPN_SERVER_PUBLIC_IP/"${OPENVPN_SERVER_ADDRESS}"/g'' ./base.conf
     <(echo -e '<ca>') \
     "${USER_CERT_KEYS_PATH}/ca.crt" \
     <(echo -e '</ca>\n<cert>') \
-    "${USER_CERT_KEYS_PATH}/${CLIENT_NAME}.crt" \
+    "${USER_CERT_KEYS_PATH}/$CLIENT_NAME.crt" \
     <(echo -e '</cert>\n<key>') \
-    "${USER_CERT_KEYS_PATH}/${CLIENT_NAME}.key" \
+    "${USER_CERT_KEYS_PATH}/$CLIENT_NAME.key" \
     <(echo -e '</key>\n<tls-crypt>') \
     "${USER_CERT_KEYS_PATH}/ta.key" \
     <(echo -e '</tls-crypt>') \
-    > "${OUTPUT_DIR}/${CLIENT_NAME}.ovpn" && \
+    > "${OUTPUT_DIR}/$CLIENT_NAME.ovpn" && \
     echo_red "... # Done ...") || \
     (echo_red "... # Some issue occurred ..." && return 1)
 

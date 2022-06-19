@@ -83,7 +83,6 @@ function download_certificates () {
   sshpass -p "${SCP_PASSWORD}" scp -o StrictHostKeyChecking=no "${CA_USER}"@"${CA_HOST}":/tmp/ca.crt /tmp/ca.crt) || \
 	(echo "... Could not execute download_certificates ..." && exit 1)
 
-
 }
 
 function send_certification_request_from_arg () {
