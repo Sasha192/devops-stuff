@@ -62,22 +62,19 @@ exit_abnormal() {                         # Function: Exit with error.
   return 1
 }
 
-  while getopts "c:" options; do         # Loop: Get the next option;
-                                            # use silent error checking;
-                                            # options n and t take arguments.
-    case "${options}" in                    #
+while getopts ":c:" options; do
+
+    case $options in
       c)
-        CLIENT_NAME=${OPTARG}
+        CLIENT_NAME=$OPTARG
         ;;
-      :)                                    # If expected argument omitted:
-        echo "Error: -${OPTARG} requires an argument."
-        exit_abnormal                       # Exit abnormally.
-        ;;
-      *)                                    # If unknown (any other) option:
-        exit_abnormal                       # Exit abnormally.
+      : | *)
+        usage
+        return 1
         ;;
     esac
-  done
+
+done
 
 if ! [[ "${#CLIENT_NAME}" -eq 0 ]]; then exit_abnormal ; fi
 
@@ -105,7 +102,7 @@ function create_client_cert_req () {
 	(cd "${EASY_RSA_DIR}" && \
 	./easyrsa gen-req "$1" nopass && \
 	cp "${EASY_RSA_DIR}/pki/private/$1.key" "${USER_CERT_KEYS_PATH}") || \
-	(echo_red "... # Could not create client cert ..." && exit 1)
+	return 1
 
 }
 
