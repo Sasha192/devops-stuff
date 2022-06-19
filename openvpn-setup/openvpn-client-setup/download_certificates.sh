@@ -56,7 +56,6 @@ usage() {
 }
 
 while getopts ":c:" options; do
-
     case $options in
       c) CLIENT_NAME=$OPTARG
         ;;
