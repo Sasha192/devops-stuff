@@ -35,7 +35,8 @@ then
 fi
 
 ( sudo mv "/tmp/${CLIENT_NAME}.crt" "${USER_CERT_KEYS_PATH}" && \
-sudo mv  "/tmp/ca.crt" "${USER_CERT_KEYS_PATH}" )|| \
+sudo mv  "/tmp/ca.crt" "${USER_CERT_KEYS_PATH}" && \
+echo_red "... Done ...")|| \
 (echo_red "... # Could not move client certificates ..." && exit 1)
 
 
