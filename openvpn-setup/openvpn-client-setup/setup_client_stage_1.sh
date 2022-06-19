@@ -60,18 +60,16 @@ usage() {
 while getopts ":c:" options; do
 
     case $options in
-      c)
-        CLIENT_NAME=$OPTARG
+      c) CLIENT_NAME=$OPTARG
         ;;
       : | *)
         usage
         return 1
         ;;
     esac
-
 done
 
-if ! [[ "${#CLIENT_NAME}" -eq 0 ]];
+if [[ "${#CLIENT_NAME}" -eq 0 ]]
 then
   usage
   return 1
