@@ -10,5 +10,6 @@ Issues:
 What is done
 - OpenVPN:
     - [x] setting up OpenVPN Cluster with one server
+      - TODO: client .ovpn does not work properly
     - [ ] setting up HA OpenVPN Cluster in the same subnet
     
