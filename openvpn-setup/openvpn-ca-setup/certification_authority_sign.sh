@@ -15,11 +15,6 @@ usage() {                                 # Function: Print a help message.
   echo "Usage: $0 [ -c  CERTIFICATE_PATH ] [ -t TYPE: {client, server} ] " 1>&2
 }
 
-exit_abnormal() {                         # Function: Exit with error.
-  usage
-  return 1
-}
-
 while getopts ":c:t:" options; do         # Loop: Get the next option;
   case $options in                    #
     c) CERTIFICATE_PATH=$OPTARG
@@ -33,8 +28,15 @@ while getopts ":c:t:" options; do         # Loop: Get the next option;
   esac
 done
 
-if [[ "${#CERTIFICATE_PATH}" -eq 0 ]]; then exit_abnormal ; fi
-if [[ "${#TYPE}" -eq 0 ]]; then exit_abnormal ; fi
+if [[ "${#CERTIFICATE_PATH}" -eq 0 ]];
+then
+  usage
+  return 1
+fi
+if [[ "${#TYPE}" -eq 0 ]]; then
+  usage
+  return 1
+fi
 
 EASY_RSA_DIR="/home/${USER}/easy-rsa" && \
 cd "${EASY_RSA_DIR}" || (echo "Could not pass into ${EASY_RSA_DIR}" && return 1)
