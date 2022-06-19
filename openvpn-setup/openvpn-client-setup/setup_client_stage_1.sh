@@ -77,7 +77,6 @@ exit_abnormal() {                         # Function: Exit with error.
         ;;
     esac
   done
-fi
 
 if ! [[ "${#CLIENT_NAME}" -eq 0 ]]; then exit_abnormal ; fi
 
