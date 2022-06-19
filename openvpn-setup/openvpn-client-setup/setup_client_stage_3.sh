@@ -54,6 +54,7 @@ sed -i ''s/OPENVPN_SERVER_PUBLIC_IP/"${OPENVPN_SERVER_ADDRESS}"/g'' ./base.conf
     "${USER_CERT_KEYS_PATH}/ta.key" \
     <(echo -e '</tls-crypt>') \
     > "${OUTPUT_DIR}/$CLIENT_NAME.ovpn" && \
+    echo_red "... ${OUTPUT_DIR}/$CLIENT_NAME.ovpn your client configuration ..." && \
     echo_red "... # Done ...") || \
     (echo_red "... # Some issue occurred ..." && return 1)
 
