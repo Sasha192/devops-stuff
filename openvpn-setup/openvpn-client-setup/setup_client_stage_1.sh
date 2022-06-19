@@ -12,14 +12,15 @@ CA_HOST="${CA_HOST}"
 SCP_PASSWORD=${SCP_PASSWORD}
 
 CURRENT_DIR="${PWD##*/}"
+PREV_PATH="$(pwd)"
 
 if [[ ! "${CURRENT_DIR}" == "openvpn-client-setup" ]]
 then
   echo "... Please, execute the bash script from its local directory ..."
 fi
 
-(. ../standard_functions.sh ) \
-|| (echo "... # ../standard_functions were NOT imported ..." && return 1)
+(. ../standard_functions.sh ) || \
+(echo "... # ../standard_functions were NOT imported ..." && return 1)
 
 if [[ -z "${CA_USER}" ]]; then
   echo_red "... ERROR ..."
@@ -126,5 +127,7 @@ echo_red "... #2 Sending the Certification Request ..."
 (send_certification_request "${EASY_RSA_DIR}/pki/reqs/$CLIENT_NAME.req") || \
 (echo_red "... # Could not send client_cert for signing ..." && return 1)
 echo_red "... #2 Done ..."
+
+cd "$PREV_PATH"
 
 history -c
