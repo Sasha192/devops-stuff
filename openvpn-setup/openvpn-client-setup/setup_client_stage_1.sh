@@ -57,11 +57,6 @@ usage() {
   echo "Usage: $0 [ -c CLIENT_NAME ] " 1>&2
 }
 
-exit_abnormal() {                         # Function: Exit with error.
-  usage
-  return 1
-}
-
 while getopts ":c:" options; do
 
     case $options in
@@ -76,7 +71,11 @@ while getopts ":c:" options; do
 
 done
 
-if ! [[ "${#CLIENT_NAME}" -eq 0 ]]; then exit_abnormal ; fi
+if ! [[ "${#CLIENT_NAME}" -eq 0 ]];
+then
+  usage
+  return 1
+fi
 
 EASY_RSA_DIR="/home/${USER}/easy-rsa" && \
 cd "${EASY_RSA_DIR}" || (echo_red "Could not pass into ${EASY_RSA_DIR}" && exit 1)
