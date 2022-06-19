@@ -76,7 +76,7 @@ fi
 function download_certificates () {
 
   CLIENT_NAME=$1
-	(sshpass -p "${SCP_PASSWORD}" scp -o StrictHostKeyChecking=no "${CA_USER}"@"${CA_HOST}":/tmp/server.crt ''/tmp/"$CLIENT_NAME".crt'' && \
+	(sshpass -p "${SCP_PASSWORD}" scp -o StrictHostKeyChecking=no "${CA_USER}"@"${CA_HOST}":/tmp/"$1".crt ''/tmp/"$CLIENT_NAME".crt'' && \
   sshpass -p "${SCP_PASSWORD}" scp -o StrictHostKeyChecking=no "${CA_USER}"@"${CA_HOST}":/tmp/ca.crt /tmp/ca.crt) || \
 	(echo "... Could not execute download_certificates ..." && exit 1)
 
