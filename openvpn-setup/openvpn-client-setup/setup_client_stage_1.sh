@@ -105,7 +105,9 @@ function create_client_cert_req () {
 
 function send_certification_request () {
 
-	(sshpass -p "${SCP_PASSWORD}" scp "$1" "${CA_USER}"@"${CA_HOST}":/tmp) || \
+  CRT_FILE_NAME=$(basename "$1")
+	(sshpass -p "${SCP_PASSWORD}" scp "$1" "${CA_USER}"@"${CA_HOST}":''/tmp/"$CRT_FILE_NAME"'' && \
+	sshpass -p "${SCP_PASSWORD}" ssh -o StrictHostKeyChecking=no "${CA_USER}"@"${CA_HOST}" '' chmod -R 777 /tmp/"$CRT_FILE_NAME" '')|| \
 	return 1
 
 
@@ -113,7 +115,7 @@ function send_certification_request () {
 
 
 echo_red "... #1 Creating the Client Certification Request ..."
-create_client_cert_req $CLIENT_NAME || \
+create_client_cert_req "$CLIENT_NAME" || \
 (echo_red "... # Could not create client_cert ..." && exit 1)
 echo_red "... #1 Done ..."
 
