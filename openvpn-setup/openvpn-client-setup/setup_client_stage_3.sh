@@ -12,22 +12,17 @@ then
 fi
 
 (. ../standard_functions.sh ) \
-|| (echo "... # ../standard_functions were NOT imported ..." && exit 1)
+|| (echo "... # ../standard_functions were NOT imported ..." && return 1)
 
 usage() {
-  echo "Usage: $0 [ -a OPENVPN_SERVER_ADDRESS ] [ -c CLIENT_NAME ] OR CLIENT_NAME env variable" 1>&2
+  echo "Usage: $0 [ -a OPENVPN_SERVER_ADDRESS ] [ -c CLIENT_NAME ]" 1>&2
 }
 
 exit_abnormal() {                         # Function: Exit with error.
   usage
-  exit 1
+  return 1
 }
 
-CLIENT_NAME="${CLIENT_NAME}"
-OPENVPN_SERVER_ADDRESS=""
-
-
-  echo_red ""
   while getopts "a:c" options; do         # Loop: Get the next option;
                                             # use silent error checking;
                                             # options n and t take arguments.
@@ -38,12 +33,9 @@ OPENVPN_SERVER_ADDRESS=""
       a)
         OPENVPN_SERVER_ADDRESS=${OPTARG}
         ;;
-      :)                                    # If expected argument omitted:
-        echo "Error: -${OPTARG} requires an argument."
-        exit_abnormal                       # Exit abnormally.
-        ;;
-      *)                                    # If unknown (any other) option:
-        exit_abnormal                       # Exit abnormally.
+      : | *)                                    # If unknown (any other) option:
+        usage
+        return 1                       # Exit abnormally.
         ;;
     esac
   done
@@ -66,7 +58,7 @@ sed -i ''s/OPENVPN_SERVER_PUBLIC_IP/"${OPENVPN_SERVER_ADDRESS}"/g'' ./base.conf
     <(echo -e '</tls-crypt>') \
     > "${OUTPUT_DIR}/${CLIENT_NAME}.ovpn" && \
     echo_red "... # Done ...") || \
-    (echo_red "... # Some issue occurred ..." && exit 1)
+    (echo_red "... # Some issue occurred ..." && return 1)
 
 
 

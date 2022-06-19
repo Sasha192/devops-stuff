@@ -10,15 +10,15 @@ then
 fi
 
 (. ../standard_functions.sh ) \
-|| (echo "... # ../standard_functions were NOT imported ..." && exit 1)
+|| (echo "... # ../standard_functions were NOT imported ..." && return 1)
 
 usage() {
-  echo "Usage: $0 [ -c CLIENT_NAME ]; OR CLIENT_NAME env variable must be specified" 1>&2
+  echo "Usage: $0 [ -c CLIENT_NAME ] " 1>&2
 }
 
 exit_abnormal() {                         # Function: Exit with error.
   usage
-  exit 1
+  return 1
 }
 
 CLIENT_NAME="${CLIENT_NAME}"
@@ -44,7 +44,10 @@ then
   done
 fi
 
-if ! [[ "${#CLIENT_NAME}" -eq 0 ]]; then exit_abnormal ; fi
+if ! [[ "${#CLIENT_NAME}" -eq 0 ]]; then
+  exit_abnormal
+  return 1
+fi
 
 sudo mv "/tmp/${CLIENT_NAME}.crt" "${USER_CERT_KEYS_PATH}" || \
 (echo_red "... # Could not move client certificates ..." && exit 1)

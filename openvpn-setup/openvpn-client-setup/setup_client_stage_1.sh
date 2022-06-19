@@ -3,9 +3,9 @@
 ### creates CSR and sends to the CA
 
 USER=$(whoami)
-USER_CERT_PATH="/home/${USER}/client_cert"
-USER_CERT_KEYS_PATH="/home/${USER}/client_cert/keys"
-EASY_RSA_DIR="/home/${USER}/easy-rsa"
+export USER_CERT_PATH="/home/${USER}/client_cert"
+export USER_CERT_KEYS_PATH="/home/${USER}/client_cert/keys"
+export EASY_RSA_DIR="/home/${USER}/easy-rsa"
 
 CA_USER="${CA_USER}"
 CA_HOST="${CA_HOST}"
@@ -19,7 +19,7 @@ then
 fi
 
 (. ../standard_functions.sh ) \
-|| (echo "... # ../standard_functions were NOT imported ..." && exit 1)
+|| (echo "... # ../standard_functions were NOT imported ..." && return 1)
 
 if [[ -z "${CA_USER}" ]]; then
   echo_red "... ERROR ..."
@@ -36,7 +36,7 @@ fi
 if ! command -v sshpass &> /dev/null
 then
     echo_red "... <sshpass> could not be found ..."
-    exit
+    return 1
 fi
 
 if [[ -z "${SCP_PASSWORD}" ]]; then
@@ -49,23 +49,18 @@ function print_exit () {
     echo_red "... The last command was not successful ..."
     echo_red "... Please, check logs ..."
     echo "... Exit ..."
-    exit 1
+    return 1
 }
 
 usage() {
-  echo "Usage: $0 [ -c CLIENT_NAME ]; OR CLIENT_NAME env variable must be specified" 1>&2
+  echo "Usage: $0 [ -c CLIENT_NAME ] " 1>&2
 }
 
 exit_abnormal() {                         # Function: Exit with error.
   usage
-  exit 1
+  return 1
 }
 
-CLIENT_NAME="${CLIENT_NAME}"
-
-if [[ -z "${CLIENT_NAME}" ]]
-then
-  echo_red ""
   while getopts "c:" options; do         # Loop: Get the next option;
                                             # use silent error checking;
                                             # options n and t take arguments.
@@ -108,28 +103,29 @@ fi
 function create_client_cert_req () {
 
 	(cd "${EASY_RSA_DIR}" && \
-	./easyrsa gen-req "${CLIENT_NAME}" nopass && \
-	cp "${EASY_RSA_DIR}/pki/private/${CLIENT_NAME}.key" "${USER_CERT_KEYS_PATH}") || \
+	./easyrsa gen-req "$1" nopass && \
+	cp "${EASY_RSA_DIR}/pki/private/$1.key" "${USER_CERT_KEYS_PATH}") || \
 	(echo_red "... # Could not create client cert ..." && exit 1)
 
 }
 
 function send_certification_request () {
 
-	sshpass -p "${SCP_PASSWORD}" scp "$1" "${CA_USER}"@"${CA_HOST}":/tmp || \
-	print_exit
+	(sshpass -p "${SCP_PASSWORD}" scp "$1" "${CA_USER}"@"${CA_HOST}":/tmp) || \
+	return 1
+
 
 }
 
 
 echo_red "... #1 Creating the Client Certification Request ..."
-create_client_cert_req || \
+create_client_cert_req $CLIENT_NAME || \
 (echo_red "... # Could not create client_cert ..." && exit 1)
 echo_red "... #1 Done ..."
 
 echo_red "... #2 Sending the Certification Request ..."
-(send_certification_request "${EASY_RSA_DIR}/pki/reqs/${CLIENT_NAME}.req") || \
-(echo_red "... # Could not send client_cert for signing ..." && exit 1)
+(send_certification_request "${EASY_RSA_DIR}/pki/reqs/$CLIENT_NAME.req") || \
+(echo_red "... # Could not send client_cert for signing ..." && return 1)
 echo_red "... #2 Done ..."
 
 history -c
