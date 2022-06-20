@@ -1,5 +1,9 @@
 ### Various DevOps Scripts:
 
+TODO:
+- [ ] make setting up executable via Ansible
+
+
 Issues:
 
 - Could not import functions from another script
