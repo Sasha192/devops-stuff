@@ -2,10 +2,14 @@
 
 TODO:
 - [ ] make setting up be:
+  - each OpenVPN client is accessible only via VPN
   - client-to-client
   - OpenVPN server is default gateway
   - how will it work with K8s and Calico CNI ?
+  - Goal is: each OpenVPN server\client can 
+  
 - [ ] make setting up executable via Ansible
+- [ ] setting up HA OpenVPN Cluster in the same subnet
 
 
 Issues:
@@ -17,6 +21,6 @@ Issues:
 
 What is done
 - OpenVPN:
-    - [x] setting up OpenVPN Cluster with one server
-    - [ ] setting up HA OpenVPN Cluster in the same subnet
+    - [ ] setting up OpenVPN Cluster with one server
+
     
