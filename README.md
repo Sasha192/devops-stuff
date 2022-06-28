@@ -1,6 +1,10 @@
 ### Various DevOps Scripts:
 
 TODO:
+- [ ] make setting up be:
+  - client-to-client
+  - OpenVPN server is default gateway
+  - how will it work with K8s and Calico CNI ?
 - [ ] make setting up executable via Ansible
 
 
