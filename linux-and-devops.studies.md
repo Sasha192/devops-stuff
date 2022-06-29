@@ -45,6 +45,8 @@
 
 - [ ] [Configure OpenVPN to work using external DHCP server](https://gist.github.com/hapylestat/c74c4c7c61546c14a047707ec9fabdce)
 
+- [ ] How DHCP works ?
+
 ### 1st block
 - https://www.cyberciti.biz/faq/tcpdump-capture-record-protocols-port/ -- tcpdump
 - https://askubuntu.com/questions/530088/ufw-for-openvpn -- ufw for openvpn
