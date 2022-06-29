@@ -3,7 +3,7 @@
 
 ### 2nd block:
 
-- [ ] client-to-client behaviour, when openvpn server is off  
+- [x] client-to-client behaviour, when openvpn server is off  
 > When we have `client-to-client` configuration,  clients ***see*** each other through the OpenVPN server.
 
 > 1. The ping request message is sent from client1 to the OpenVPN server
@@ -34,7 +34,16 @@
 
 - [ ] [What is the jumphost and how it is different from a firewall or VPN](https://www.quora.com/What-is-a-jump-host-How-is-it-different-from-a-firewall-and-a-VPN-connection)  
 - [ ] [K8s Network Deep Dive](https://itnext.io/kubernetes-network-deep-dive-7492341e0ab5)
+- [ ] Setup dynamic DNS Linux Server:
+> [Linux: Dynamic DNS (DDNS) setup](https://learningtechnix.wordpress.com/2020/04/25/linux-dynamic-dns-ddns-setup/)
 
+> [LINUX-FU: YOUR OWN DYNAMIC DNS](https://hackaday.com/2020/08/25/linux-fu-your-own-dynamic-dns/)
+
+> [debian#DDNS](https://wiki.debian.org/DDNS)
+
+> [Understanding DNS Port 53 with Examples](https://www.howtouselinux.com/post/dns-port)
+
+- [ ] [Configure OpenVPN to work using external DHCP server](https://gist.github.com/hapylestat/c74c4c7c61546c14a047707ec9fabdce)
 
 ### 1st block
 - https://www.cyberciti.biz/faq/tcpdump-capture-record-protocols-port/ -- tcpdump
