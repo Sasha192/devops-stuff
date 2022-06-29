@@ -4,7 +4,17 @@
 ### 2nd block:
 
 - [ ] client-to-client behaviour, when openvpn server is off  
-> 
+> When we have `client-to-client` configuration,  clients ***see*** each other through the OpenVPN server.
+
+> 1. The ping request message is sent from client1 to the OpenVPN server
+> 2. The OpenVPN server forwards the message to client2
+> 3. client2 sends back a ping reply message, again to the server
+> 4. The OpenVPN server forwards the ping reply back to the client1
+
+<div style="text-align: right"> &copy; Mastering OpenVPN </div>
+
+
+- [ ] difference between `tun` and `tap` interfaces
 - [ ] what is `tun` interface destination ?
 > [possible answer](https://stackoverflow.com/questions/36375530/what-is-the-destination-address-for-a-tap-tun-device)
 - [ ] make OpenVPN-Server be default gateway for OpenVPN client
