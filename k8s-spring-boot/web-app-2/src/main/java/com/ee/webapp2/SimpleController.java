@@ -1,4 +1,4 @@
-package com.ee.webapp1;
+package com.ee.webapp2;
 
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.MediaType;
