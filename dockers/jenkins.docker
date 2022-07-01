@@ -1,3 +1,6 @@
 FROM jenkins/jenkins:lts
+COPY ./jdk-15.0.2 /usr/lib/jvm/jdk-15.0.2
+ENV JAVA_HOME=/usr/lib/jvm/jdk-15.0.2
 COPY ./maven /usr/local/bin/maven
-ENV PATH="/usr/local/bin/maven/bin:${PATH}"
+ENV PATH="/usr/lib/jvm/jdk-15.0.2/bin/java:/usr/local/bin/maven/bin:${PATH}"
+

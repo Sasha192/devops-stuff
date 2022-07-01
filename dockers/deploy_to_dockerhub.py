@@ -35,7 +35,7 @@ def push_images(tags, creds):
 
 
 if __name__ == "__main__":
-    image_names = ["jenkins-maven"]
+    image_names = ["sasha192bunin/jenkins-maven"]
     creds = docker_creds()
     push_images(tags=image_names, creds=creds)
     print("completed.")
