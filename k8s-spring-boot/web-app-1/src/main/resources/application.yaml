@@ -1,6 +1,13 @@
 
+server:
+  port : 8090
+
 spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+
+scheduled-call:
+  web-app-2: ${WEB_APP_2_HOST:http://web-app-2:8100}
+  fixedDelayMs: 10000
 
