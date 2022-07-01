@@ -1,0 +1,3 @@
+FROM jenkins/jenkins:lts
+COPY ./maven /usr/local/bin/maven
+ENV PATH="/usr/local/bin/maven/bin:${PATH}"

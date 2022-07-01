@@ -2,7 +2,7 @@ version: "3.9"
 services:
 
   jenkins:
-    image: jenkins/jenkins:lts
+    image: sasha192bunin/jenkins-maven
     privileged: true
     user: root
     volumes:
@@ -15,4 +15,16 @@ services:
     profiles:
       - jenkins
 
-
+  jenkins-custom:
+    image: jenkins-maven
+    privileged: true
+    user: root
+    volumes:
+      - /home/${USER}/jenkins_compose/jenkins_configuration:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+    container_name: jenkins-maven
+    ports:
+      - "8001:8080"
+      - "50000:50000"
+    profiles:
+      - jenkins-maven
