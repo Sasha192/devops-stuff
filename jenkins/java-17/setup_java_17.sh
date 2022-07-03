@@ -5,5 +5,5 @@ tar -xzvf jdk17.tar.gz
 find . -maxdepth 1 -type d -name '*jdk*' -exec mv {} jdk17 \;
 sudo ln -s "$(pwd)/jdk17/bin/java" /usr/local/bin/java17
 echo JDK_17="$(pwd)/jdk17" >> ~/.bashrc
-sudo chmod 777 ./switch-to-java-15.sh
-sudo ln -s "$(pwd)/switch-to-java17.sh" /usr/local/bin/switch-java-17
+sudo chmod 777 ./switch-to-java-17.sh
+sudo ln -s "$(pwd)/switch-to-java-17.sh" /usr/local/bin/switch-java-17
