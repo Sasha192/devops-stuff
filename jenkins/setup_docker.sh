@@ -10,3 +10,4 @@ apt-cache policy docker-ce
 ### run docker without sudo
 sudo usermod -aG docker "${USER}"
 id -nG
+docker run hello-world
