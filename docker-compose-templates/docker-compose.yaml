@@ -2,15 +2,18 @@ version: "3.9"
 services:
 
   jenkins-custom:
-    image: sasha192bunin/jenkins-maven
+    image: sasha192bunin/jenkins-jdk15
     privileged: true
     user: root
     volumes:
-      - /home/${USER}/jenkins_compose/jenkins_configuration:/var/jenkins_home
-      - /var/run/docker.sock:/var/run/docker.sock
+      - /home/${USER}/bitnami/jenkins:/bitnami/jenkins
+#      - /var/run/docker.sock:/var/run/docker.sock
     container_name: jenkins-custom
     ports:
       - "8001:8080"
       - "50000:50000"
+    environment:
+      - JENKINS_USERNAME=jenkins
+      - JENKINS_PASSWORD=jenkins
     profiles:
       - jenkins-custom
