@@ -2,10 +2,10 @@ FROM bitnami/jenkins
 LABEL maintainer "Bitnami <containers@bitnami.com>"
 
 USER 0
-COPY ./jdk-15.0.2 /opt/bitnami/java
-ENV JAVA_HOME=/opt/bitnami/java
+COPY ./jdk-15.0.2 /opt/bitnami/jdk15
+ENV JAVA_HOME=/opt/bitnami/jdk15
 COPY ./maven /opt/bitnami/maven
-ENV PATH="/opt/bitnami/java/bin/java:/opt/bitnami/maven/bin:${PATH}"
+ENV PATH="/opt/bitnami/jdk15/bin/java:/opt/bitnami/maven/bin:${PATH}"
 USER 1001
 
 ## Change user to perform privileged actions
