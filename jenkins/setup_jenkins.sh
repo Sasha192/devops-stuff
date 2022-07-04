@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -x
+
 ### 1 Setting Up
 wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo apt-key add -
 sudo sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
@@ -27,3 +29,8 @@ sudo systemctl enable jenkins.service
 
 ### 3 initialAdminSecret
 sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+
+set +x
+
+# clean history
+history -c

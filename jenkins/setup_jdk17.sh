@@ -16,3 +16,8 @@ find . -maxdepth 1 -type d -name '*apache-maven*' -exec mv {} mvn3.8.3 \;
 sudo chmod -R 777 "$(pwd)/mvn3.8.3"
 sudo ln -sf "$(pwd)/mvn3.8.3/bin/mvn" /usr/bin/mvn
 sudo ln -sf "$(pwd)/mvn3.8.3/" /home/jenkins/common/maven
+
+set +x
+
+# clean history
+history -c
