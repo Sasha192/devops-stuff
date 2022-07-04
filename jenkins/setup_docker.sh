@@ -8,6 +8,6 @@ sudo apt update
 apt-cache policy docker-ce
 
 ### run docker without sudo
-sudo usermod -aG docker "${USER}"
-id -nG
-docker run hello-world
+sudo usermod -aG docker "jenkins"
+sudo ln -sf "$(which docker)" /home/jenkins/common/docker
+sudo -u jenkins docker run hello-world
