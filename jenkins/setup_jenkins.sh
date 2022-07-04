@@ -7,14 +7,15 @@ sudo apt update
 sudo apt install jenkins
 
 # JENKINS_HOME;
-mkdir "/home/jenkins"
+mkdir -p "/home/jenkins"
 sudo chown jenkins:jenkins "/home/jenkins"
 sudo usermod -d "/home/jenkins" jenkins
-sudo ln -s "/home/jenkins" /var/lib/jenkins
+sudo ln -sf "/home/jenkins" /var/lib/jenkins
 sudo chown jenkins /var/lib/jenkins
-sudo sed -i -e "/JENKINS_HOME=/ s/=.*/=/home/jenkins/" /etc/default/jenkins
 
 sudo su jenkins
+cd
+echo "$(pwd)"
 echo "$USER"
 
 ### 2 Run Jenkins
