@@ -15,6 +15,7 @@ sudo chown jenkins /var/lib/jenkins
 sudo sed -i -e "/JENKINS_HOME=/ s/=.*/=/home/jenkins/" /etc/default/jenkins
 
 sudo su jenkins
+echo "$USER"
 
 ### 2 Run Jenkins
 #sudo systemctl restart jenkins.service
