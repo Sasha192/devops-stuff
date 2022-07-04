@@ -12,7 +12,7 @@ mkdir -p "/home/jenkins" && \
 sudo chown jenkins:jenkins "/home/jenkins" && \
 sudo usermod -d "/home/jenkins" jenkins && \
 sudo ln -sf "/home/jenkins" /var/lib/jenkins && \
-sudo chown jenkins /var/lib/jenkins
+sudo chown jenkins:jenkins /var/lib/jenkins
 
 ### SETUP COMMON LIBRARIES
 sudo mkdir -p /home/jenkins/common && \
