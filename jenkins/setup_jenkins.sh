@@ -7,18 +7,18 @@ sudo apt update
 sudo apt install jenkins
 
 # JENKINS_HOME;
-export JENKINS_HOME="/home/jenkins" && \
-mkdir -p "/home/jenkins" && \
-sudo chown jenkins:jenkins "/home/jenkins" && \
-sudo usermod -d "/home/jenkins" jenkins && \
-sudo cp -prv /var/lib/jenkins /home/jenkins/ && \
-sudo rm -rf /var/lib/jenkins && \
-sudo ln -sf "/home/jenkins" /var/lib/jenkins && \
+export JENKINS_HOME="/home/jenkins"
+mkdir -p "/home/jenkins"
+sudo chown jenkins:jenkins "/home/jenkins"
+sudo usermod -d "/home/jenkins" jenkins
+sudo cp -prv /var/lib/jenkins /home/jenkins/
+sudo rm -rf /var/lib/jenkins
+sudo ln -sf "/home/jenkins" /var/lib/jenkins
 sudo chown jenkins:jenkins /var/lib/jenkins
 
 ### SETUP COMMON LIBRARIES
-sudo mkdir -p /home/jenkins/common && \
-sudo chown jenkins:jenkins /home/jenkins/common && \
+sudo mkdir -p /home/jenkins/common
+sudo chown jenkins:jenkins /home/jenkins/common
 sudo chmod -R 777 /home/jenkins/common
 
 ### 2 Run Jenkins
