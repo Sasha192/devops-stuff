@@ -92,9 +92,9 @@ exit 1'''
 cd $APPLICATION_PATH
 export WEB_APP_NAME="$(find . -iname $APPLICATION_NAME*.jar -exec basename {} .jar \\;)"
 export WEB_APP_VERSION="${WEB_APP_NAME#*$APPLICATION_NAME-}"
-echo ${DOCKER_PWD} | docker login -u ${DOCKER_ID} --password-stdin
-docker push $DOCKER_IMAGE_NAME:latest
-docker push $DOCKER_IMAGE_NAME:${WEB_APP_VERSION}
+echo $DOCKER_PWD | docker login -u $DOCKER_ID --password-stdin
+docker push "$DOCKER_IMAGE_NAME:latest"
+docker push "$DOCKER_IMAGE_NAME:${WEB_APP_VERSION}"
 '''
         }
 
