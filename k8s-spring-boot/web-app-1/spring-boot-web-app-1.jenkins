@@ -11,22 +11,22 @@ pipeline {
       steps {
         withCredentials([usernamePassword(usernameVariable: 'DOCKER_ID', passwordVariable: 'DOCKER_PWD', credentialsId: 'DOCKER_CREDENTIALS')]) {
           sh '''
-if [ -z $PATH ]; then
+if [ -z "$PATH" ]; then
     exit 1
 fi
-if [ -z DOCKER_IMAGE_NAME ]; then
+if [ -z "$DOCKER_IMAGE_NAME" ]; then
     exit 1
 fi
-if [ -z $APPLICATION_PATH ]; then
+if [ -z "$APPLICATION_PATH" ]; then
     exit 1
 fi
-if [ -z $APPLICATION_NAME ]; then
+if [ -z "$APPLICATION_NAME" ]; then
     exit 1
 fi
-if [ -z $DOCKER_PWD ]; then
+if [ -z "$DOCKER_PWD" ]; then
     exit 1
 fi
-if [ -z $DOCKER_ID ]; then
+if [ -z "$DOCKER_ID" ]; then
     exit 1
 fi
 '''
@@ -40,7 +40,7 @@ fi
         withCredentials([usernamePassword(usernameVariable: 'DOCKER_ID', passwordVariable: 'DOCKER_PWD', credentialsId: 'DOCKER_CREDENTIALS')]) {
           sh '''export JAVA_HOME="${JENKINS_HOME}/common/jdk17"
 mvn --version
-cd ${APPLICATION_PATH}
+cd $APPLICATION_PATH
 mvn clean package'''
         }
 
@@ -50,12 +50,12 @@ mvn clean package'''
     stage('build docker image') {
       steps {
         withCredentials([usernamePassword(usernameVariable: 'DOCKER_ID', passwordVariable: 'DOCKER_PWD', credentialsId: 'DOCKER_CREDENTIALS')]) {
-          sh '''cd ${APPLICATION_PATH}
+          sh '''cd $APPLICATION_PATH
 pwd
-export WEB_APP_PATH="$(find . -iname \'${APPLICATION_NAME}*.jar\')"
-export WEB_APP_NAME="$(find . -iname \'${APPLICATION_NAME}*.jar\' -exec basename {} .jar \\;)"
-export WEB_APP_VERSION="${WEB_APP_NAME#*${APPLICATION_NAME}-}"
-docker build -f Dockerfile . -t "${DOCKER_IMAGE_NAME}:${WEB_APP_VERSION}" -t ${DOCKER_IMAGE_NAME}:latest
+export WEB_APP_PATH="$(find . -iname \'$APPLICATION_NAME*.jar\')"
+export WEB_APP_NAME="$(find . -iname \'$APPLICATION_NAME*.jar\' -exec basename {} .jar \\;)"
+export WEB_APP_VERSION="${WEB_APP_NAME#*$APPLICATION_NAME-}"
+docker build -f Dockerfile . -t "$DOCKER_IMAGE_NAME:${WEB_APP_VERSION}" -t $DOCKER_IMAGE_NAME:latest
 '''
         }
 
@@ -65,7 +65,7 @@ docker build -f Dockerfile . -t "${DOCKER_IMAGE_NAME}:${WEB_APP_VERSION}" -t ${D
     stage('run docker image') {
       steps {
         withCredentials([usernamePassword(usernameVariable: 'DOCKER_ID', passwordVariable: 'DOCKER_PWD', credentialsId: 'DOCKER_CREDENTIALS')]) {
-          sh '''docker_id="$(docker run --detach ${DOCKER_IMAGE_NAME}:latest)"
+          sh '''docker_id="$(docker run --detach $DOCKER_IMAGE_NAME:latest)"
 sleep 60
 start=$(date +%s)
 while [ "$(( $(date +%s) - start ))" -lt 30 ]; do
@@ -87,12 +87,12 @@ exit 1'''
     stage('push docker image') {
       steps {
         withCredentials([usernamePassword(usernameVariable: 'DOCKER_ID', passwordVariable: 'DOCKER_PWD', credentialsId: 'DOCKER_CREDENTIALS')]) {
-          sh '''cd ${APPLICATION_PATH}
-export WEB_APP_NAME="$(find . -iname \'${APPLICATION_NAME}*.jar\' -exec basename {} .jar \\;)"
-export WEB_APP_VERSION="${WEB_APP_NAME#*${APPLICATION_NAME}-}"
+          sh '''cd $APPLICATION_PATH
+export WEB_APP_NAME="$(find . -iname \'$APPLICATION_NAME*.jar\' -exec basename {} .jar \\;)"
+export WEB_APP_VERSION="${WEB_APP_NAME#*$APPLICATION_NAME-}"
 echo ${DOCKER_PWD} | docker login -u ${DOCKER_ID} --password-stdin
-docker push ${DOCKER_IMAGE_NAME}:latest
-docker push ${DOCKER_IMAGE_NAME}:${WEB_APP_VERSION}'''
+docker push $DOCKER_IMAGE_NAME:latest
+docker push $DOCKER_IMAGE_NAME:${WEB_APP_VERSION}'''
         }
 
       }
@@ -101,8 +101,8 @@ docker push ${DOCKER_IMAGE_NAME}:${WEB_APP_VERSION}'''
     stage('stop this docker image containers') {
           steps {
             withCredentials([usernamePassword(usernameVariable: 'DOCKER_ID', passwordVariable: 'DOCKER_PWD', credentialsId: 'DOCKER_CREDENTIALS')]) {
-              sh '''docker stop $(docker ps | grep ${DOCKER_IMAGE_NAME} | awk \'{print $1}\') || echo "Done"
-    $(docker images -a | grep "${DOCKER_IMAGE_NAME}" | awk \'{print $3}\' | xargs docker rmi --force) || echo "Done"'''
+              sh '''docker stop $(docker ps | grep $DOCKER_IMAGE_NAME | awk \'{print $1}\') || echo "Done"
+    $(docker images -a | grep "$DOCKER_IMAGE_NAME" | awk \'{print $3}\' | xargs docker rmi --force) || echo "Done"'''
             }
 
           }
