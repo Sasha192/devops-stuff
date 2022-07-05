@@ -5,6 +5,12 @@ pipeline {
     APPLICATION_PATH='k8s-spring-boot/web-app-1'
     APPLICATION_NAME='web-app-1'
   }
+  stages {
+    stage('checkout') {
+      steps {
+        git 'https://github.com/Sasha192/devops-stuff.git'
+      }
+    }
 
     stage('build package') {
       steps {
