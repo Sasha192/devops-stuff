@@ -89,6 +89,6 @@ docker push ${DOCKER_IMAGE_NAME}:${WEB_APP_VERSION}'''
     buildDiscarder(logRotator(numToKeepStr: '5'))
   }
   triggers {
-    upstream(upstreamProjects: 'pre-spring-boot-web-app-1', threshold: hudson.model.Result.SUCCESS)
+    upstream(upstreamProjects: 'pre-spring-boot-web-app-1-dsl', threshold: hudson.model.Result.SUCCESS)
   }
 }
