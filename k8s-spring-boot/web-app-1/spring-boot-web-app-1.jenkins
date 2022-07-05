@@ -70,7 +70,7 @@ docker build -f Dockerfile . -t "$DOCKER_IMAGE_NAME:${WEB_APP_VERSION}" -t $DOCK
 sleep 60
 start=$(date +%s)
 while [ "$(( $(date +%s) - start ))" -lt 30 ]; do
-  if [ "$(docker inspect -f \'{{.State.Status}}\' ${docker_id})" = "running" ]
+  if [ "$(docker inspect -f '{{.State.Status}}' ${docker_id})" = "running" ]
   then
     docker stop "${docker_id}"
     exit 0
@@ -88,12 +88,14 @@ exit 1'''
     stage('push docker image') {
       steps {
         withCredentials([usernamePassword(usernameVariable: 'DOCKER_ID', passwordVariable: 'DOCKER_PWD', credentialsId: 'DOCKER_CREDENTIALS')]) {
-          sh '''cd $APPLICATION_PATH
-export WEB_APP_NAME="$(find . -iname \'$APPLICATION_NAME*.jar\' -exec basename {} .jar \\;)"
+          sh '''
+cd $APPLICATION_PATH
+export WEB_APP_NAME="$(find . -iname $APPLICATION_NAME*.jar -exec basename {} .jar \\;)"
 export WEB_APP_VERSION="${WEB_APP_NAME#*$APPLICATION_NAME-}"
 echo ${DOCKER_PWD} | docker login -u ${DOCKER_ID} --password-stdin
 docker push $DOCKER_IMAGE_NAME:latest
-docker push $DOCKER_IMAGE_NAME:${WEB_APP_VERSION}'''
+docker push $DOCKER_IMAGE_NAME:${WEB_APP_VERSION}
+'''
         }
 
       }
@@ -102,8 +104,11 @@ docker push $DOCKER_IMAGE_NAME:${WEB_APP_VERSION}'''
     stage('stop this docker image containers') {
           steps {
             withCredentials([usernamePassword(usernameVariable: 'DOCKER_ID', passwordVariable: 'DOCKER_PWD', credentialsId: 'DOCKER_CREDENTIALS')]) {
-              sh '''docker stop $(docker ps | grep $DOCKER_IMAGE_NAME | awk \'{print $1}\') || echo "Done"
-    $(docker images -a | grep "$DOCKER_IMAGE_NAME" | awk \'{print $3}\' | xargs docker rmi --force) || echo "Done"'''
+              sh
+              '''
+              docker stop $(docker ps | grep $DOCKER_IMAGE_NAME | awk '{print $1}') || echo "Done"
+              $(docker images -a | grep "$DOCKER_IMAGE_NAME" | awk '{print $3}' | xargs docker rmi --force) || echo "Done"
+              '''
             }
 
           }
