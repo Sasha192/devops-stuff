@@ -52,8 +52,9 @@ mvn clean package'''
         withCredentials([usernamePassword(usernameVariable: 'DOCKER_ID', passwordVariable: 'DOCKER_PWD', credentialsId: 'DOCKER_CREDENTIALS')]) {
           sh '''cd $APPLICATION_PATH
 pwd
-export WEB_APP_PATH="$(find . -iname \'$APPLICATION_NAME*.jar\')"
-export WEB_APP_NAME="$(find . -iname \'$APPLICATION_NAME*.jar\' -exec basename {} .jar \\;)"
+echo $APPLICATION_NAME
+export WEB_APP_PATH="$(find . -iname $APPLICATION_NAME*.jar)"
+export WEB_APP_NAME="$(find . -iname $APPLICATION_NAME*.jar -exec basename {} .jar \\;)"
 export WEB_APP_VERSION="${WEB_APP_NAME#*$APPLICATION_NAME-}"
 docker build -f Dockerfile . -t "$DOCKER_IMAGE_NAME:${WEB_APP_VERSION}" -t $DOCKER_IMAGE_NAME:latest
 '''
