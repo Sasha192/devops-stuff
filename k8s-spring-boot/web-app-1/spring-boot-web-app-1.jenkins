@@ -10,8 +10,7 @@ pipeline {
     stage('echo environment') {
       steps {
         withCredentials([usernamePassword(usernameVariable: 'DOCKER_ID', passwordVariable: 'DOCKER_PWD', credentialsId: 'DOCKER_CREDENTIALS')]) {
-          sh
-            '''
+          sh '''
                 if [ -z "$PATH" ]; then
                     exit 1
                 fi
@@ -39,8 +38,7 @@ pipeline {
     stage('build package') {
       steps {
         withCredentials([usernamePassword(usernameVariable: 'DOCKER_ID', passwordVariable: 'DOCKER_PWD', credentialsId: 'DOCKER_CREDENTIALS')]) {
-          sh
-            '''
+          sh '''
                 export JAVA_HOME="${JENKINS_HOME}/common/jdk17"
                 mvn --version
                 cd $APPLICATION_PATH
@@ -54,8 +52,7 @@ pipeline {
     stage('build docker image') {
       steps {
         withCredentials([usernamePassword(usernameVariable: 'DOCKER_ID', passwordVariable: 'DOCKER_PWD', credentialsId: 'DOCKER_CREDENTIALS')]) {
-          sh
-            '''
+          sh '''
                 cd $APPLICATION_PATH
                 pwd
                 echo $APPLICATION_NAME
@@ -72,8 +69,7 @@ pipeline {
     stage('run docker image') {
       steps {
         withCredentials([usernamePassword(usernameVariable: 'DOCKER_ID', passwordVariable: 'DOCKER_PWD', credentialsId: 'DOCKER_CREDENTIALS')]) {
-          sh
-            '''
+          sh '''
                 docker_id="$(docker run --detach $DOCKER_IMAGE_NAME:latest)"
                 sleep 60
                 start=$(date +%s)
@@ -97,8 +93,7 @@ pipeline {
     stage('push docker image') {
       steps {
         withCredentials([usernamePassword(usernameVariable: 'DOCKER_ID', passwordVariable: 'DOCKER_PWD', credentialsId: 'DOCKER_CREDENTIALS')]) {
-          sh
-            '''
+          sh '''
                 cd $APPLICATION_PATH
                 export WEB_APP_NAME="$(find . -iname $APPLICATION_NAME*.jar -exec basename {} .jar \\;)"
                 export WEB_APP_VERSION="${WEB_APP_NAME#*$APPLICATION_NAME-}"
@@ -114,8 +109,7 @@ pipeline {
     stage('stop this docker image containers') {
           steps {
             withCredentials([usernamePassword(usernameVariable: 'DOCKER_ID', passwordVariable: 'DOCKER_PWD', credentialsId: 'DOCKER_CREDENTIALS')]) {
-              sh
-                '''
+              sh '''
                     docker stop $(docker ps | grep $DOCKER_IMAGE_NAME | awk '{print $1}') || echo "Done"
                     $(docker images -a | grep "$DOCKER_IMAGE_NAME" | awk '{print $3}' | xargs docker rmi --force) || echo "Done"
                 '''
@@ -126,7 +120,7 @@ pipeline {
 
   }
   options {
-    buildDiscarder(logRotator(numToKeepStr: '5'))
+    buildDiscarder(logRotator(numToKeepStr: '2'))
   }
   triggers {
     upstream(upstreamProjects: 'pre-spring-boot-web-app-1-dsl', threshold: hudson.model.Result.SUCCESS)
