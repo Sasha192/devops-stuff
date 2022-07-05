@@ -7,6 +7,34 @@ pipeline {
   }
   stages {
 
+    stage('echo environment') {
+      steps {
+        withCredentials([usernamePassword(usernameVariable: 'DOCKER_ID', passwordVariable: 'DOCKER_PWD', credentialsId: 'DOCKER_CREDENTIALS')]) {
+          sh '''
+if [ -z $PATH ]; then
+    exit 1
+fi
+if [ -z DOCKER_IMAGE_NAME ]; then
+    exit 1
+fi
+if [ -z $APPLICATION_PATH ]; then
+    exit 1
+fi
+if [ -z $APPLICATION_NAME ]; then
+    exit 1
+fi
+if [ -z $DOCKER_PWD ]; then
+    exit 1
+fi
+if [ -z $DOCKER_ID ]; then
+    exit 1
+fi
+'''
+        }
+
+      }
+    }
+
     stage('build package') {
       steps {
         withCredentials([usernamePassword(usernameVariable: 'DOCKER_ID', passwordVariable: 'DOCKER_PWD', credentialsId: 'DOCKER_CREDENTIALS')]) {
