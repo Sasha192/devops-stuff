@@ -1,0 +1,14 @@
+pipeline {
+  agent any
+  stages {
+    stage('delete old docker builds') {
+      steps {
+        sh '(docker images -a | grep "sasha192bunin/spring_boot_web_app_1" | awk \'{print $3}\' | xargs docker rmi --force) || echo "Done"'
+      }
+    }
+
+  }
+  options {
+    buildDiscarder(logRotator(numToKeepStr: '1'))
+  }
+}
