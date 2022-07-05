@@ -1,0 +1,128 @@
+pipeline {
+  agent any
+  environment {
+    DOCKER_IMAGE_NAME='sasha192bunin/spring_boot_web_app_2'
+    APPLICATION_PATH='k8s-spring-boot/web-app-2'
+    APPLICATION_NAME='web-app-2'
+  }
+  stages {
+
+    stage('echo environment') {
+      steps {
+        withCredentials([usernamePassword(usernameVariable: 'DOCKER_ID', passwordVariable: 'DOCKER_PWD', credentialsId: 'DOCKER_CREDENTIALS')]) {
+          sh '''
+                if [ -z "$PATH" ]; then
+                    exit 1
+                fi
+                if [ -z "$DOCKER_IMAGE_NAME" ]; then
+                    exit 1
+                fi
+                if [ -z "$APPLICATION_PATH" ]; then
+                    exit 1
+                fi
+                if [ -z "$APPLICATION_NAME" ]; then
+                    exit 1
+                fi
+                if [ -z "$DOCKER_PWD" ]; then
+                    exit 1
+                fi
+                if [ -z "$DOCKER_ID" ]; then
+                    exit 1
+                fi
+            '''
+        }
+
+      }
+    }
+
+    stage('build package') {
+      steps {
+        withCredentials([usernamePassword(usernameVariable: 'DOCKER_ID', passwordVariable: 'DOCKER_PWD', credentialsId: 'DOCKER_CREDENTIALS')]) {
+          sh '''
+                export JAVA_HOME="${JENKINS_HOME}/common/jdk17"
+                mvn --version
+                cd $APPLICATION_PATH
+                mvn clean package
+            '''
+        }
+
+      }
+    }
+
+    stage('build docker image') {
+      steps {
+        withCredentials([usernamePassword(usernameVariable: 'DOCKER_ID', passwordVariable: 'DOCKER_PWD', credentialsId: 'DOCKER_CREDENTIALS')]) {
+          sh '''
+                cd $APPLICATION_PATH
+                pwd
+                echo $APPLICATION_NAME
+                export WEB_APP_PATH="$(find . -iname $APPLICATION_NAME*.jar)"
+                export WEB_APP_NAME="$(find . -iname $APPLICATION_NAME*.jar -exec basename {} .jar \\;)"
+                export WEB_APP_VERSION="${WEB_APP_NAME#*$APPLICATION_NAME-}"
+                docker build -f Dockerfile . -t "$DOCKER_IMAGE_NAME:${WEB_APP_VERSION}" -t $DOCKER_IMAGE_NAME:latest
+            '''
+        }
+
+      }
+    }
+
+    stage('run docker image') {
+      steps {
+        withCredentials([usernamePassword(usernameVariable: 'DOCKER_ID', passwordVariable: 'DOCKER_PWD', credentialsId: 'DOCKER_CREDENTIALS')]) {
+          sh '''
+                docker_id="$(docker run --detach $DOCKER_IMAGE_NAME:latest)"
+                sleep 60
+                start=$(date +%s)
+                while [ "$(( $(date +%s) - start ))" -lt 30 ]; do
+                  if [ "$(docker inspect -f '{{.State.Status}}' ${docker_id})" = "running" ]
+                  then
+                    docker stop "${docker_id}"
+                    exit 0
+                  fi
+                done
+
+                echo "Timeout"
+                docker stop "${docker_id}"
+                exit 1
+            '''
+        }
+
+      }
+    }
+
+    stage('push docker image') {
+      steps {
+        withCredentials([usernamePassword(usernameVariable: 'DOCKER_ID', passwordVariable: 'DOCKER_PWD', credentialsId: 'DOCKER_CREDENTIALS')]) {
+          sh '''
+                cd $APPLICATION_PATH
+                export WEB_APP_NAME="$(find . -iname $APPLICATION_NAME*.jar -exec basename {} .jar \\;)"
+                export WEB_APP_VERSION="${WEB_APP_NAME#*$APPLICATION_NAME-}"
+                echo $DOCKER_PWD | docker login -u $DOCKER_ID --password-stdin
+                docker push "$DOCKER_IMAGE_NAME:latest"
+                docker push "$DOCKER_IMAGE_NAME:${WEB_APP_VERSION}"
+            '''
+        }
+
+      }
+    }
+
+    stage('stop this docker image containers') {
+          steps {
+            withCredentials([usernamePassword(usernameVariable: 'DOCKER_ID', passwordVariable: 'DOCKER_PWD', credentialsId: 'DOCKER_CREDENTIALS')]) {
+              sh '''
+                    docker stop $(docker ps | grep $DOCKER_IMAGE_NAME | awk '{print $1}') || echo "Done"
+                    $(docker images -a | grep "$DOCKER_IMAGE_NAME" | awk '{print $3}' | xargs docker rmi --force) || echo "Done"
+                '''
+            }
+
+          }
+        }
+
+  }
+  options {
+    buildDiscarder(logRotator(numToKeepStr: '2'))
+  }
+  triggers {
+    upstream(upstreamProjects: 'pre-spring-boot-web-app-2-dsl', threshold: hudson.model.Result.SUCCESS)
+  }
+}
