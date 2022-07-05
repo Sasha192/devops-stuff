@@ -1,0 +1,26 @@
+pipeline {
+    agent any
+    environment {
+        DOCKER_IMAGE_NAME = 'sasha192bunin/spring_boot_web_app_1'
+        RELATIVE_PATH = 'k8s-spring-boot/web-app-1'
+        DOCKER_CREDENTIALS = credentials('DOCKER_CREDENTIALS')
+    }
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '5', artifactNumToKeepStr: '5'))
+    }
+    stages {
+        stage('clean previous docker builds') {
+            steps {
+                sh '(docker images -a | grep ${DOCKER_IMAGE_NAME} | awk "{print $3}" | xargs docker rmi --force) || echo "Done"'
+            }
+        }
+        stage('build') {
+            steps {
+                sh 'export JAVA_HOME="${JENKINS_HOME}/common/jdk17"'
+                sh 'mvn --version'
+                sh 'cd k8s-spring-boot/web-app-1'
+                sh 'mvn clean package'
+            }
+        }
+    }
+}
