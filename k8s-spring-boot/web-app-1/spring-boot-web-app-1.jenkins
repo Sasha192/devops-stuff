@@ -8,7 +8,6 @@ pipeline {
 
     stage('build package') {
       steps {
-        git 'https://github.com/Sasha192/devops-stuff.git'
         withCredentials([usernamePassword(usernameVariable: 'DOCKER_ID', passwordVariable: 'DOCKER_PWD', credentialsId: 'DOCKER_CREDENTIALS')]) {
           sh '''export JAVA_HOME="${JENKINS_HOME}/common/jdk17"
 mvn --version
@@ -20,7 +19,6 @@ mvn clean package'''
 
     stage('build docker image') {
       steps {
-        git 'https://github.com/Sasha192/devops-stuff.git'
         withCredentials([usernamePassword(usernameVariable: 'DOCKER_ID', passwordVariable: 'DOCKER_PWD', credentialsId: 'DOCKER_CREDENTIALS')]) {
           sh '''cd ${APPLICATION_PATH}
 export WEB_APP_PATH="$(find . -iname \'${APPLICATION_NAME}*.jar\')"
@@ -34,7 +32,6 @@ docker build -f Dockerfile . -t "${DOCKER_IMAGE_NAME}:${WEB_APP_VERSION}" -t ${D
 
     stage('run docker image') {
       steps {
-        git 'https://github.com/Sasha192/devops-stuff.git'
         withCredentials([usernamePassword(usernameVariable: 'DOCKER_ID', passwordVariable: 'DOCKER_PWD', credentialsId: 'DOCKER_CREDENTIALS')]) {
           sh '''docker_id="$(docker run --detach ${DOCKER_IMAGE_NAME}:latest)"
 sleep 60
@@ -56,7 +53,6 @@ exit 1'''
 
     stage('push docker image') {
       steps {
-        git 'https://github.com/Sasha192/devops-stuff.git'
         withCredentials([usernamePassword(usernameVariable: 'DOCKER_ID', passwordVariable: 'DOCKER_PWD', credentialsId: 'DOCKER_CREDENTIALS')]) {
           sh '''cd ${APPLICATION_PATH}
 export WEB_APP_NAME="$(find . -iname \'${APPLICATION_NAME}*.jar\' -exec basename {} .jar \\;)"
@@ -70,8 +66,7 @@ docker push ${DOCKER_IMAGE_NAME}:${WEB_APP_VERSION}'''
 
     stage('stop this docker image containers') {
           steps {
-            git 'https://github.com/Sasha192/devops-stuff.git'
-            withCredentials([usernamePassword(usernameVariable: 'DOCKER_ID', passwordVariable: 'DOCKER_PWD', credentialsId: 'DOCKER_CREDENTIALS')]) {
+                withCredentials([usernamePassword(usernameVariable: 'DOCKER_ID', passwordVariable: 'DOCKER_PWD', credentialsId: 'DOCKER_CREDENTIALS')]) {
               sh '''docker stop $(docker ps | grep ${DOCKER_IMAGE_NAME} | awk \'{print $1}\') || echo "Done"
     $(docker images -a | grep "${DOCKER_IMAGE_NAME}" | awk \'{print $3}\' | xargs docker rmi --force) || echo "Done"'''
             }
