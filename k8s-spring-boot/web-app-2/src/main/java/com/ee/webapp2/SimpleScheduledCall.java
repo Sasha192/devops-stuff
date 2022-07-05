@@ -21,7 +21,7 @@ public class SimpleScheduledCall {
 	private final RestTemplate restTemplate;
 	private final String urlAPI;
 
-	public SimpleScheduledCall(@Value("${scheduled-call.web-app}") String webAppHost) {
+	public SimpleScheduledCall(@Value("${scheduled-call.web-app-1}") String webAppHost) {
 		this.restTemplate = new RestTemplate();
 		restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
 		this.urlAPI = webAppHost + "/api/v1";
