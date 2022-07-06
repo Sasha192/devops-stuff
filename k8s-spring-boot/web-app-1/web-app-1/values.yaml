@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: sasha192bunin/spring_boot_web_app_1:latest
+  repository: sasha192bunin/spring_boot_web_app_1
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
