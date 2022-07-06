@@ -13,3 +13,8 @@ done
 K8S_CONTROL_PLANE_HOST=$(dig ubuntu1 +short)
 echo -e "$K8S_CONTROL_PLANE_HOST k8s-control-plane\n$(sudo cat /etc/hosts)" > /etc/hosts
 
+K8S_CONTROL_PLANE_HOST=$(dig ubuntu1 +short)
+
+if [[ $(hostname) =~ ubuntu* ]]; then
+  echo -e "127.0.1.1 $(hostname)\n$(sudo cat /etc/hosts)" > /etc/hosts
+fi
