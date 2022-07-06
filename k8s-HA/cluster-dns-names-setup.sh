@@ -10,10 +10,8 @@ for ubuntu_i in "${ubuntu_names[@]}"; do
  echo -e "$ubuntu_i\n$(sudo cat /etc/hosts)" | sudo tee /etc/hosts
 done
 
-K8S_CONTROL_PLANE_HOST=$(dig ubuntu1 +short)
+K8S_CONTROL_PLANE_HOST=$(dig "$(hostname)" +short)
 echo -e "$K8S_CONTROL_PLANE_HOST k8s-control-plane\n$(sudo cat /etc/hosts)" | sudo tee /etc/hosts
-
-K8S_CONTROL_PLANE_HOST=$(dig ubuntu1 +short)
 
 if [[ $(hostname) =~ ubuntu* ]]; then
   sudo echo -e "127.0.1.1 $(hostname)\n$(sudo cat /etc/hosts)" | sudo tee /etc/hosts
