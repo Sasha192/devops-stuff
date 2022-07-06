@@ -6,8 +6,8 @@ metadata:
     {{- include "web-app-2.labels" . | nindent 4 }}
 spec:
   revisionHistoryLimit: 5
-  minReadySeconds: { { .Values.docker.minReadySeconds } }
-  progressDeadlineSeconds: { { .Values.docker.progressDeadlineSeconds } }
+  minReadySeconds: {{ .Values.docker.minReadySeconds }}
+  progressDeadlineSeconds: {{ .Values.docker.progressDeadlineSeconds }}
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
