@@ -5,6 +5,9 @@ metadata:
   labels:
     {{- include "web-app-2.labels" . | nindent 4 }}
 spec:
+  revisionHistoryLimit: 5
+  minReadySeconds: { { .Values.docker.minReadySeconds } }
+  progressDeadlineSeconds: { { .Values.docker.progressDeadlineSeconds } }
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
@@ -35,7 +38,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: 80
+              containerPort: {{ .Values.docker.containerPort }}
               protocol: TCP
           livenessProbe:
             httpGet:
