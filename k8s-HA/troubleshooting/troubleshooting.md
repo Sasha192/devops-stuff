@@ -21,4 +21,5 @@ ifconfig
 kubectl set env daemonset/calico-node -n kube-system IP_AUTODETECTION_METHOD=interface=enp0s3
 ```
 
+/// i had to look into [this](https://kienmn97.medium.com/handling-errors-while-deploying-kubernetes-cluster-on-vm-cluster-with-calico-network-710e3b122086) 🤣
 
