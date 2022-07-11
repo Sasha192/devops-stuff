@@ -11,8 +11,8 @@ spec:
         - key: node-role.kubernetes.io/master
           operator: Equal
           effect: NoSchedule
-  externalIPs:
-    - 192.168.31.154
-    - 192.168.31.248
-    - 192.168.31.94
-    - 192.168.31.247
+      externalIPs:
+        - 192.168.31.154
+        - 192.168.31.248
+        - 192.168.31.94
+        - 192.168.31.247
