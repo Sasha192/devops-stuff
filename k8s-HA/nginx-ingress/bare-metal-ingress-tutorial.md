@@ -19,7 +19,7 @@ kubectl get nodes -o wide
 
 #### label each node you want to run ingress-controller on it:
 ```
-kubectl label node k8s-master-node runingressnginx=true
+kubectl label node ubuntu1 runingressnginx=true
 ```
 
 #### make corresponding changes to the ingress-svc-patch-externalIps.yaml and apply them
